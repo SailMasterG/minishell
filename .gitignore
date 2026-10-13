@@ -1,0 +1,20 @@
+# Bins
+/executor
+/minishell
+
+# Objets and Libraries
+objs/
+*.o
+*.a
+includes/lib/libft/objects/
+
+# files and logs    
+salida.txt
+texto.txt
+*.log
+vgcore.*
+
+# Editor / System files
+.vscode/
+*.swp
+.DS_Store%  
