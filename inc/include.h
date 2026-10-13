@@ -1,42 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerr <chguerr@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: rpinheir <your_login@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/09/08 23:27:00 by chguerr           #+#    #+#             */
-/*   Updated: 2026/09/08 23:27:22 by chguerr          ###   ########.ch       */
+/*   Created: 2026/10/13 16:39:58 by rpinheir          #+#    #+#             */
+/*   Updated: 2026/10/13 16:40:56 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#if !defined(MINISHELL_H)
-# define MINISHELL_H
-
-# include <unistd.h>
-# include <stdlib.h>
+#ifndef INCLUDE_H
+# define INCLUDE_H
+# define EXIT_SIGNAL_BASE 128
+# define WS_SEP '\001'
 # include <stdio.h>
-# include <sys/wait.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <limits.h>
 # include <errno.h>
 # include <fcntl.h>
-# include <readline/readline.h>
-# include <libft.h>
+# include <sys/types.h>
+# include <unistd.h>
+# include <stdbool.h>
+# include <sys/wait.h>
+# include <signal.h>
+# include <sys/ioctl.h>
 
-typedef struct s_redir
+# define CLR_SCREEN "\033[1;1H\033[2J"
+# define MAUVE "\001\033[38;2;203;166;247m\002"
+# define PEACH "\001\033[38;2;250;179;135m\002"
+# define GREY  "\001\033[38;2;166;173;200m\002"
+# define SKY   "\001\033[38;2;180;195;254m\002"
+# define RED   "\001\033[38;2;243;139;168m\002"
+# define RESET "\001\033[0m\002"
+# define HD_MARK "\033[38;2;108;112;134m· \033[0m"
+
+typedef enum e_token_type
 {
-	int				type;
-	char			*target;
-	struct s_redir	*next;
-}	t_redir;
-
-typedef struct s_cmd
-{
-	char				**args;
-	char				*path;
-	t_redir				*redir;
-	struct s_cmd		*next;
-
-}	t_cmd;
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT,
+	TOKEN_REDIR_APPEND,
+	TOKEN_REDIR_HEREDOC
+}				t_token_type;
 
 typedef enum e_redir_type
 {
@@ -44,8 +51,52 @@ typedef enum e_redir_type
 	REDIR_OUT,
 	REDIR_APPEND,
 	REDIR_HEREDOC
-}	t_redir_type;
+}				t_redir_type;
 
-int executor(t_cmd *cmd, char **envp);
+typedef enum e_signal_modes
+{
+	INTERACTIVE,
+	EXECUTION,
+	FORKED,
+}				t_signal_modes;
 
-#endif // MINISHELL_H
+typedef struct s_token
+{
+	t_token_type	type;
+	bool			is_var;
+	bool			is_quoted;
+	char			*value;
+	struct s_token	*next;
+}				t_token;
+
+typedef struct s_redir
+{
+	t_redir_type	type;
+	char			*file;
+	struct s_redir	*next;
+	int				heredoc_fd;
+	bool			is_quoted;
+}				t_redir;
+
+typedef struct s_cmd
+{
+	char			**cmd_args;
+	t_redir			*redirections;
+	struct s_cmd	*next;
+}				t_cmd;
+
+typedef struct s_shell
+{
+	pid_t			hereid;
+	int				prevfd;
+	int				wread[2];
+	int				cmd_count;
+	pid_t			*pids;
+	t_cmd			*cmds;
+	bool			print_newline;
+	char			**env;
+	long long		exit_status;
+	char			*historian;
+}			t_shell;
+
+#endif
