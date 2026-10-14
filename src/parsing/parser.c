@@ -48,15 +48,15 @@ t_cmd	*parse(char *line, t_shell *shell)
 	tokens = lexer(line);
 	if (!tokens)
 		return (NULL);
+	debug_tokens(tokens, line);
 	if (!validation(tokens))
 		return (shell->exit_status = 2, free_tokens(tokens), NULL);
 	if (!expansion(tokens, shell))
 		return (free_tokens(tokens), NULL);
 	cmds = build_cmds(tokens);
-	debug_tokens(tokens, line);
+	debug_cmds(cmds);
 	free_tokens(tokens);
 	cmds = filter_null_cmds(cmds);
-	debug_cmds(cmds);
 	if (!cmds)
 		shell->exit_status = 0;
 	return (cmds);

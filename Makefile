@@ -72,7 +72,7 @@ clean:
 fclean: clean
 	@rm -f $(NAME)
 	@$(MAKE) --silent -C $(LIBFT_DIR) fclean
-	@rm -f debug.log minishell .minishell_history
+	@rm -f debug.log minishell .minishell_history .mini_cnt
 re: fclean all
 
 debug: CFLAGS += $(VAL_FLAGS)
