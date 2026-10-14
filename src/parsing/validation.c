@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../inc/include.h"
 
 bool	redir_validation(t_token *token)
 {

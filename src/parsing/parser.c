@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../inc/include.h"
 
 t_cmd	*filter_null_cmds(t_cmd *cmds)
 {

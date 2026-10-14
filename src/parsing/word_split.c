@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../inc/include.h"
 
 char	*resolve_redir_file(t_redir_type type, char *file, bool *is_quoted)
 {

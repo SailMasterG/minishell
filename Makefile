@@ -17,7 +17,9 @@ SRC = main.c \
 	  parsing/redirections.c \
 	  parsing/validation.c \
 	  parsing/build_cmds.c \
-	  parsing/word_split.c 
+	  parsing/word_split.c \
+	  parsing/debug_cmd.c \
+	  parsing/debug_redir.c
 
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 
@@ -50,7 +52,7 @@ all: $(NAME)
 	@printf " $(C)✅ [$(NAME)] $(B)Build complete$(X)\n"
 
 $(NAME): $(OBJ) $(LIBFT)
-	@$(CC) $(CFLAGS) -L$(LIBFT_DIR) $(OBJ) $(LIBFT) -lreadline -ltermcap -lncurses -o $(NAME)
+	@$(CC) $(CFLAGS) -L$(LIBFT_DIR) $(OBJ) $(LIBFT) -lreadline -lncurses -o $(NAME)
 
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)/execution $(OBJDIR)/parsing $(OBJDIR)/builtins

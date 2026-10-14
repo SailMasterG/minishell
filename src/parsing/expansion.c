@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../inc/include.h"
 
 char	*variable_expansion(char *name, t_shell *shell)
 {

@@ -9,7 +9,7 @@
 /*   Updated: 2026/07/17 17:06:50 by pedro            ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../../include/minishell.h"
+#include "../../inc/include.h"
 
 void	append_redir(t_redir **head, t_redir_type type, char *file)
 {
