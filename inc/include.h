@@ -99,4 +99,7 @@ typedef struct s_shell
 	char			*historian;
 }			t_shell;
 
+void	debug_cmds(t_cmd *cmds);
+void	debug_redirs(t_cmd *cmd, int fd);
+void	debug_tokens(t_token *tokens, char *line);
 #endif
