@@ -34,7 +34,7 @@ void	debug_tokens(t_token *tokens, char *line)
 	int	fd;
 	int	i;
 
-	fd = open("../Minishell/debug.log", O_WRONLY | O_CREAT | O_APPEND, 0644);
+	fd = open("/tmp/debug.log", O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
 		return ;
 	ft_putstr_fd("=== PROMPT ===\n", fd);
@@ -82,7 +82,7 @@ void	debug_cmds(t_cmd *cmds)
 	int	fd;
 	int	i;
 
-	fd = open("../Minishell/debug.log", O_WRONLY | O_CREAT | O_APPEND, 0644);
+	fd = open("/tmp/debug.log", O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
 		return ;
 	ft_putstr_fd("=== CMDS ===\n", fd);
