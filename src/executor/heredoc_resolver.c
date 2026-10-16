@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_resolver.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
+/*   By: yourlogin <youremail@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/14 14:04:28 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/14 16:11:18 by chguerre         ###   ########.fr       */
+/*   Created: 2026/10/16 17:54:44 by yourlogin         #+#    #+#             */
+/*   Updated: 2026/10/16 17:54:44 by yourlogin        ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	is_heredoc(t_redir *node, int i, int pid)
 	return (0);
 }
 
-void	heredoc_resolve(t_cmd *cmd, int nb_cmd, int pid)
+int	heredoc_resolve(t_cmd *cmd, int nb_cmd, int pid)
 {
 	t_cmd	*current;
 	t_redir	*node;
@@ -88,12 +88,11 @@ void	heredoc_resolve(t_cmd *cmd, int nb_cmd, int pid)
 		while (node != NULL)
 		{
 			if (!is_heredoc(node, i, pid))
-			{
-				// ???
-			}
+				return (0);
 			node = node->next;
 		}
 		current = current->next;
 		i++;
 	}
+	return (1);
 }
