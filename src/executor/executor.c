@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/16 22:11:29 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/16 22:27:46 by chguerre         ###   ########.ch       */
+/*   Created: 2026/10/16 22:35:03 by chguerre          #+#    #+#             */
+/*   Updated: 2026/10/16 22:37:15 by chguerre         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,6 @@ int	executor(t_shell *shell)
 		return (1);
 	}
 	code = wait_pid(shell->pids, shell->cmd_count);
-
+	free(shell->pids);
 	return (code);
 }
