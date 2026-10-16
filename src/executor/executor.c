@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/16 19:43:02 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/16 19:49:06 by chguerre         ###   ########.ch       */
+/*   Created: 2026/10/16 20:01:34 by chguerre          #+#    #+#             */
+/*   Updated: 2026/10/16 20:01:34 by chguerre         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,64 +49,7 @@ int pipe_creator(t_shell *shell, int i, int *fd, pid_t *pid)
 	}
 	return (0);
 }
-void redirs_cmd(t_redir *node, t_shell *shell)
-{
-	int		fd_redir;
-	
-	while (node != NULL)
-	{
-		fd_redir = -1;
-		if (node->type == REDIR_IN)
-		{
-			fd_redir = open(node->file, O_RDONLY);
-			if (fd_redir < 0)
-			{
-				perror("Error de lectura de archivo");
-				exit(126);
-			}
-			dup2(fd_redir, STDIN_FILENO);
-			close(fd_redir);
-		}
-		else if (node->type == REDIR_OUT)
-		{
-			fd_redir = open(node->file,
-					O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (fd_redir < 0)
-			{
-				perror("Error de lectura de archivo");
-				exit(126);
-			}
-			dup2(fd_redir, STDOUT_FILENO);
-			close(fd_redir);
-		}
-		else if (node->type == REDIR_APPEND)
-		{
-			fd_redir = open(node->file,
-					O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (fd_redir < 0)
-			{
-				perror("Error de lectura de archivo");
-				exit(126);
-			}
-			dup2(fd_redir, STDOUT_FILENO);
-			close(fd_redir);
-		}
-		else if (node->type == REDIR_HEREDOC)
-		{
-			fd_redir = open(node->file, O_RDONLY);
-			if (fd_redir < 0)
-			{
-				perror("Error de lectura de archivo 2");
-				exit(126);
-			}
-			unlink(node->file);
-			free(node->file);
-			dup2(fd_redir, STDIN_FILENO);
-			close(fd_redir);
-		}
-		node = node->next;
-	}	
-}
+
 
 int	executor(t_shell *shell)
 {

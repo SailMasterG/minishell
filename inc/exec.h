@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/16 19:09:29 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/16 19:09:29 by chguerre         ###   ########.ch       */
+/*   Created: 2026/10/16 20:01:59 by chguerre          #+#    #+#             */
+/*   Updated: 2026/10/16 20:02:51 by chguerre         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int		count_cmd(t_cmd *cmd);
 void	resolve_all_paths(t_cmd *cmd, char **envp);
 char	*find_cmd(char *cmd, char **paths_env);
 char	**extract_paths(char **envp);
+void	redirs_cmd(t_redir *node, t_shell *shell);
 
 
 
