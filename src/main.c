@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/16 14:06:14 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/16 14:41:10 by rpinheir         ###   ########.ch       */
+/*   Created: 2026/10/16 20:40:14 by chguerre          #+#    #+#             */
+/*   Updated: 2026/10/16 20:40:14 by chguerre         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	show_prompt(t_shell *shell)
 				free(line);
 				continue ;
 			}
-			//executor(shell);
+			executor(shell);
 			free(line);
 		}
 	}

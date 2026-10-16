@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/16 20:11:06 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/16 20:11:58 by chguerre         ###   ########.ch       */
+/*   Created: 2026/10/16 20:50:13 by chguerre          #+#    #+#             */
+/*   Updated: 2026/10/16 20:50:34 by chguerre         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int pipe_creator(t_shell *shell, int i, int *fd, pid_t *pid)
 int	executor(t_shell *shell)
 {
 	int		fd[2];
-	pid_t	*pid;
 	int		i;
 	t_cmd	*current;
 	t_redir	*node;
@@ -62,34 +61,35 @@ int	executor(t_shell *shell)
 
 	code = 0;
 	i = 0;
+	resolve_all_paths(shell->cmds, shell->env);
 	shell->cmd_count = count_cmd(shell->cmds);
 	shell->prevfd = -1;
 	current = shell->cmds;
-	pid = malloc(sizeof(pid_t) * shell->cmd_count);
-	if (pid == NULL)
+	shell->pids = malloc(sizeof(pid_t) * shell->cmd_count);
+	if (shell->pids == NULL)
 	{
 		perror("malloc");
 		return (1);
 	}
-	if (!heredoc_resolve(shell->cmds, shell->cmd_count, getpid()))
+	if (!exec_heredoc(shell->cmds, shell->cmd_count, getpid()))
 	{
-		free(pid);
+		free(shell->pids);
 		return (1);
 	}
 	while (i < shell->cmd_count)
 	{
-		if (pipe_creator(shell, i, fd, pid))
+		if (pipe_creator(shell, i, fd, shell->pids))
 			return (1);
 
 		node = current->redirections;
-		pid[i] = fork();
-		if (pid[i] == -1)
+		shell->pids[i] = fork();
+		if (shell->pids[i] == -1)
 		{
 			perror("fork");
-			free(pid);
+			free(shell->pids);
 			return (1);
 		}
-		if (pid[i] == 0)
+		if (shell->pids[i] == 0)
 		{
 			if (shell->prevfd != -1)
 			{
@@ -102,18 +102,12 @@ int	executor(t_shell *shell)
 				close(fd[0]);
 				close(fd[1]);
 			}
-			redirs_cmd(node, shell);
+			redirs_cmd(node);
 			if ((execve(current->path, current->cmd_args, shell->env)) == -1)
 			{
 				perror("Error: ");
 				exit(127);
 			}
-		}
-		while (node != NULL)
-		{
-			if (node->type == REDIR_HEREDOC)
-				free(node->file);
-			node = node->next;
 		}
 		if (current->next != NULL)
 			current = current->next;
@@ -126,7 +120,8 @@ int	executor(t_shell *shell)
 		}
 		i++;
 	}
-	code = wait_pid(pid, shell->cmd_count);
-	free(pid);
+	code = wait_pid(shell->pids, shell->cmd_count);
+	free_cmds(shell->cmds);
+	free(shell->pids);
 	return (code);
 }
