@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_cmds.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saouissi <saouissi@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/17 12:34:47 by pedro             #+#    #+#             */
-/*   Updated: 2026/10/16 14:40:23 by rpinheir         ###   ########.ch       */
+/*   Created: 2026/10/16 21:02:10 by chguerre          #+#    #+#             */
+/*   Updated: 2026/10/16 21:04:30 by chguerre         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	free_cmds(t_cmd *cmds)
 		while (cmds->cmd_args[i])
 			free(cmds->cmd_args[i++]);
 		free(cmds->cmd_args);
+		free(cmds->path);
 		redir = cmds->redirections;
 		while (redir)
 		{
