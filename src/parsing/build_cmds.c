@@ -6,7 +6,7 @@
 /*   By: saouissi <saouissi@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 12:34:47 by pedro             #+#    #+#             */
-/*   Updated: 2026/10/16 14:28:07 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/16 14:40:23 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,7 @@ void	free_cmds(t_cmd *cmds)
 
 	while (cmds)
 	{
-		if (cmds->next)
-			next_cmd = cmds->next;
-		else
-			next_cmd = NULL;
+		next_cmd = cmds->next;
 		i = 0;
 		while (cmds->cmd_args[i])
 			free(cmds->cmd_args[i++]);

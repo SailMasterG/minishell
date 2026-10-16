@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 14:06:14 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/16 14:22:40 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/16 14:41:10 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ int	main(int ac, char **av, char **env)
 	shell.pids = NULL;
 	shell.print_newline = true;
 	shell.env = enver(env);
+	shell.cmds = NULL;
+	shell.exit_status = 0;
 	show_prompt(&shell);
 	if (shell.cmds)
 		free_cmds(shell.cmds);

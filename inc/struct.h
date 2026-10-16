@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 14:09:15 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/16 14:17:50 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/16 14:42:36 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct s_shell
 	bool			print_newline;
 	char			**env;
 	long long		exit_status;
-	char			*historian;
 }			t_shell;
 
 #endif
