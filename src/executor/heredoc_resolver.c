@@ -36,11 +36,11 @@ static char	*heredoc_path_temp(int i, int pid)
 	char	*pid_txt;
 	char	*id;
 
-	pid_txt=			ft_itoa(pid);
-	id=					ft_itoa(i);
-	prefix=				ft_strjoin(".sailmaster_",pid_txt);
-	path_temp=			ft_strjoin(prefix, "_");
-	route_path=			ft_strjoin(path_temp, id);
+	pid_txt = ft_itoa(pid);
+	id = ft_itoa(i);
+	prefix = ft_strjoin(".sailmaster_", pid_txt);
+	path_temp = ft_strjoin(prefix, "_");
+	route_path = ft_strjoin(path_temp, id);
 	free(prefix);
 	free(pid_txt);
 	free(id);
