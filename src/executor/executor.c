@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
+/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/09/21 05:43:32 by chguerr           #+#    #+#             */
-/*   Updated: 2026/10/14 15:46:13 by chguerre         ###   ########.fr       */
+/*   Created: 2026/10/16 19:20:34 by chguerre          #+#    #+#             */
+/*   Updated: 2026/10/16 19:28:11 by chguerre         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
-
-static int	count_cmd(t_cmd *cmd)
-{
-	t_cmd	*current;
-	int		count;
-
-	count = 0;
-	current = cmd;
-	while (current != NULL)
-	{
-		current = current->next;
-		count++;
-	}
-	return (count);
-}
 
 int	wait_pid(pid_t *pid, int nb_cmd)
 {
@@ -51,75 +36,22 @@ int	wait_pid(pid_t *pid, int nb_cmd)
 	}
 	return (code);
 }
-
-char	**extract_paths(char **envp)
+int pipe_creator(t_shell *shell, int i, int *fd, pid_t *pid)
 {
-	int		i;
-	char	**paths_env;
-
-	paths_env = NULL;
-	i = 0;
-	while (envp[i] != NULL)
+	if (i < shell->cmd_count - 1)
 	{
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+		if (pipe(fd) == -1)
 		{
-			paths_env = ft_split(envp[i] + 5, ':');
-			break ;
+			perror("pipe");
+			free(pid);
+			return (1);
 		}
-		i++;
 	}
-	if (!paths_env)
-	{
-		ft_printf("Error: PATH not found in environment variables.\n");
-		return (NULL);
-	}
-	return (paths_env);
-}
-
-char	*find_cmd(char *cmd, char **paths_env)
-{
-	char	*path;
-	char	*tmp;
-	int		i;
-
-	if (!cmd || !paths_env)
-		return (NULL);
-	i = 0;
-	while (paths_env[i] != NULL)
-	{
-		tmp = ft_strjoin(paths_env[i], "/");
-		path = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(path, F_OK) == 0)
-			return (path);
-		free(path);
-		i++;
-	}
-	return (NULL);
-}
-
-void	resolve_all_paths(t_cmd *cmd, char **envp)
-{
-	t_cmd	*current;
-	char	**envp_routes;
-
-	envp_routes = extract_paths(envp);
-	current = cmd;
-	while (current != NULL)
-	{
-		if (current->cmd_args[0][0] == '/'
-			|| ft_strchr(current->cmd_args[0], '/'))
-			current->path = current->cmd_args[0];
-		else
-			current->path = find_cmd(current->cmd_args[0], envp_routes);
-		current = current->next;
-	}
-	free(envp_routes);
+	return (0);
 }
 
 int	executor(t_shell *shell)
 {
-	int		nbr_cmd;
 	int		fd[2];
 	pid_t	*pid;
 	int		prev_fd;
@@ -131,31 +63,25 @@ int	executor(t_shell *shell)
 
 	code = 0;
 	i = 0;
-	nbr_cmd = count_cmd(shell->cmds);
+	shell->cmd_count = count_cmd(shell->cmds);
 	prev_fd = -1;
 	current = shell->cmds;
-	pid = malloc(sizeof(pid_t) * nbr_cmd);
+	pid = malloc(sizeof(pid_t) * shell->cmd_count);
 	if (pid == NULL)
 	{
 		perror("malloc");
 		return (1);
 	}
-	if (!heredoc_resolve(shell->cmds, nbr_cmd, getpid()))
+	if (!heredoc_resolve(shell->cmds, shell->cmd_count, getpid()))
 	{
 		free(pid);
 		return (1);
 	}
-	while (i < nbr_cmd)
+	while (i < shell->cmd_count)
 	{
-		if (i < nbr_cmd - 1)
-		{
-			if (pipe(fd) == -1)
-			{
-				perror("pipe");
-				free(pid);
-				return (1);
-			}
-		}
+		if (pipe_creator(shell, i, fd, pid))
+			return (1);
+
 		node = current->redirections;
 		pid[i] = fork();
 		if (pid[i] == -1)
@@ -171,7 +97,7 @@ int	executor(t_shell *shell)
 				dup2(prev_fd, STDIN_FILENO);
 				close(prev_fd);
 			}
-			if (i < nbr_cmd - 1)
+			if (i < shell->cmd_count - 1)
 			{
 				dup2(fd[1], STDOUT_FILENO);
 				close(fd[0]);
@@ -246,14 +172,14 @@ int	executor(t_shell *shell)
 			current = current->next;
 		if (prev_fd != -1)
 			close(prev_fd);
-		if (i < nbr_cmd - 1)
+		if (i < shell->cmd_count - 1)
 		{
 			close(fd[1]);
 			prev_fd = fd[0];
 		}
 		i++;
 	}
-	code = wait_pid(pid, nbr_cmd);
+	code = wait_pid(pid, shell->cmd_count);
 	free(pid);
 	return (code);
 }
