@@ -11,74 +11,15 @@
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
-/*
-void heredoc_resolve(t_cmd *cmd, int nb_cmd, int pid)
-{
-	int fd;
-	t_cmd *current;
-	t_redir *node;
-	char *line;
-	char *route_path;
-	char *path_temp;
-	int i;
 
-	current = cmd;
-
-	i = 0;
-	while(i < nb_cmd)
-	{
-		node = current->redirections;
-		while(node != NULL)
-		{
-			if(node->type == REDIR_HEREDOC)
-			{
-				char *pid_txt;
-				char *id;
-
-				pid_txt = ft_itoa(pid);
-				id = ft_itoa(i);
-				path_temp = ft_strjoin("/tmp/sailmaster_",pid_txt);
-				route_path = ft_strjoin(path_temp, id);
-				free(pid_txt);
-				free(id);
-				free(path_temp);
-				fd = open(route_path, O_CREAT | O_WRONLY , 0644);
-				if(fd < 0)
-				{
-					perror("Error de Lectura de archivo 1");
-					exit(126);
-				}
-				while(1)
-				{
-					line = readline("heredoc>");
-					if(line == NULL)
-						break;
-					if(ft_strncmp(line, node->target, ft_strlen(node->target) + 1) == 0)
-						break;
-					write(fd, line, ft_strlen(line));
-					write(fd, "\n", 1  );
-					free(line);
-				}
-				free(line);
-				close(fd);
-				free(node->target);
-				node->target = route_path;
-			}
-			node = node->next;
-		}
-		current = current->next;
-		i++;
-	}
-}
-*/
-static int count_cmd(t_cmd *cmd)
+static int	count_cmd(t_cmd *cmd)
 {
 	t_cmd	*current;
 	int		count;
 
 	count = 0;
 	current = cmd;
-	while(current != NULL)
+	while (current != NULL)
 	{
 		current = current->next;
 		count++;
@@ -86,23 +27,24 @@ static int count_cmd(t_cmd *cmd)
 	return (count);
 }
 
-int wait_pid(pid_t *pid, int nb_cmd)
+int	wait_pid(pid_t *pid, int nb_cmd)
 {
 	int		status;
 	int		i;
-	int 	code;
+	int		code;
 	pid_t	caugth_pid;
+	pid_t	last_pid;
 
+	last_pid = pid[nb_cmd - 1];
 	i = 0;
-	pid_t last_pid = pid[nb_cmd - 1];
-	while(i < nb_cmd)
+	while (i < nb_cmd)
 	{
 		caugth_pid = waitpid(pid[i], &status, 0);
-		if(caugth_pid == last_pid)
+		if (caugth_pid == last_pid)
 		{
 			if (WIFSIGNALED(status))
 				code = WTERMSIG(status) + 128;
-			else if (WIFEXITED(status) )
+			else if (WIFEXITED(status))
 				code = WEXITSTATUS(status);
 		}
 		i++;
@@ -110,10 +52,10 @@ int wait_pid(pid_t *pid, int nb_cmd)
 	return (code);
 }
 
-char **extract_paths(char **envp)
+char	**extract_paths(char **envp)
 {
-	int i;
-	char **paths_env;
+	int		i;
+	char	**paths_env;
 
 	paths_env = NULL;
 	i = 0;
@@ -134,7 +76,7 @@ char **extract_paths(char **envp)
 	return (paths_env);
 }
 
-char *find_cmd(char *cmd, char **paths_env)
+char	*find_cmd(char *cmd, char **paths_env)
 {
 	char	*path;
 	char	*tmp;
@@ -156,47 +98,47 @@ char *find_cmd(char *cmd, char **paths_env)
 	return (NULL);
 }
 
-void resolve_all_paths(t_cmd *cmd, char **envp)
+void	resolve_all_paths(t_cmd *cmd, char **envp)
 {
-    t_cmd *current;
-    char **envp_routes;
+	t_cmd	*current;
+	char	**envp_routes;
 
-    envp_routes = extract_paths(envp);
-    current = cmd;
-    while(current != NULL)
-    {
-        if(current->cmd_args[0][0] == '/' || ft_strchr(current->cmd_args[0], '/'))
-            current->path = current->cmd_args[0];
-        else
-            current->path = find_cmd(current->cmd_args[0], envp_routes);
-        current = current->next;
-    }
-    free(envp_routes);
+	envp_routes = extract_paths(envp);
+	current = cmd;
+	while (current != NULL)
+	{
+		if (current->cmd_args[0][0] == '/'
+			|| ft_strchr(current->cmd_args[0], '/'))
+			current->path = current->cmd_args[0];
+		else
+			current->path = find_cmd(current->cmd_args[0], envp_routes);
+		current = current->next;
+	}
+	free(envp_routes);
 }
 
-int executor(t_shell *shell)
+int	executor(t_shell *shell)
 {
-	int nbr_cmd = count_cmd(shell->cmds);
-	int fd[2];
-	pid_t *pid;
+	int		nbr_cmd;
+	int		fd[2];
+	pid_t	*pid;
+	int		prev_fd;
+	int		i;
+	t_cmd	*current;
+	t_redir	*node;
+	int		fd_redir;
+	int		code;
 
-	int prev_fd;
-	int i;
-	t_cmd *current;
-
-	t_redir *node;
-	int fd_redir;
-	int code;
 	code = 0;
-
 	i = 0;
+	nbr_cmd = count_cmd(shell->cmds);
 	prev_fd = -1;
 	current = shell->cmds;
-	pid = malloc(sizeof(pid_t)*nbr_cmd);
-	if(pid ==NULL)
+	pid = malloc(sizeof(pid_t) * nbr_cmd);
+	if (pid == NULL)
 	{
 		perror("malloc");
-		return(1);
+		return (1);
 	}
 	heredoc_resolve(shell->cmds, nbr_cmd, getpid());
 	while (i < nbr_cmd)
@@ -218,26 +160,26 @@ int executor(t_shell *shell)
 			free(pid);
 			return (1);
 		}
-		if(pid[i] == 0)
+		if (pid[i] == 0)
 		{
-			if(prev_fd != -1)
+			if (prev_fd != -1)
 			{
 				dup2(prev_fd, STDIN_FILENO);
 				close(prev_fd);
 			}
-			if(i < nbr_cmd  - 1)
+			if (i < nbr_cmd - 1)
 			{
 				dup2(fd[1], STDOUT_FILENO);
 				close(fd[0]);
 				close(fd[1]);
 			}
-			while(node != NULL)
+			while (node != NULL)
 			{
 				fd_redir = -1;
-				if(node->type == REDIR_IN)
+				if (node->type == REDIR_IN)
 				{
 					fd_redir = open(node->file, O_RDONLY);
-					if(fd_redir < 0)
+					if (fd_redir < 0)
 					{
 						perror("Error de lectura de archivo");
 						exit(126);
@@ -247,8 +189,9 @@ int executor(t_shell *shell)
 				}
 				else if (node->type == REDIR_OUT)
 				{
-					fd_redir = open(node->file, O_WRONLY | O_CREAT | O_TRUNC , 0644);
-					if(fd_redir < 0)
+					fd_redir = open(node->file,
+							O_WRONLY | O_CREAT | O_TRUNC, 0644);
+					if (fd_redir < 0)
 					{
 						perror("Error de lectura de archivo");
 						exit(126);
@@ -258,8 +201,9 @@ int executor(t_shell *shell)
 				}
 				else if (node->type == REDIR_APPEND)
 				{
-					fd_redir = open(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-					if(fd_redir < 0)
+					fd_redir = open(node->file,
+							O_WRONLY | O_CREAT | O_APPEND, 0644);
+					if (fd_redir < 0)
 					{
 						perror("Error de lectura de archivo");
 						exit(126);
@@ -270,7 +214,7 @@ int executor(t_shell *shell)
 				else if (node->type == REDIR_HEREDOC)
 				{
 					fd_redir = open(node->file, O_RDONLY);
-					if(fd_redir < 0)
+					if (fd_redir < 0)
 					{
 						perror("Error de lectura de archivo 2");
 						exit(126);
@@ -282,22 +226,23 @@ int executor(t_shell *shell)
 				}
 				node = node->next;
 			}
-
-				execve(current->path, current->cmd_args, shell->env);
+			if ((execve(current->path, current->cmd_args, shell->env)) == -1)
+			{
 				perror("Error: ");
 				exit(127);
+			}
 		}
-		while(node != NULL)
+		while (node != NULL)
 		{
-			if(node->type == REDIR_HEREDOC)
+			if (node->type == REDIR_HEREDOC)
 				free(node->file);
 			node = node->next;
 		}
-		if(current->next != NULL)
+		if (current->next != NULL)
 			current = current->next;
-		if(prev_fd != -1)
+		if (prev_fd != -1)
 			close(prev_fd);
-		if(i < nbr_cmd - 1)
+		if (i < nbr_cmd - 1)
 		{
 			close(fd[1]);
 			prev_fd = fd[0];
@@ -306,5 +251,5 @@ int executor(t_shell *shell)
 	}
 	code = wait_pid(pid, nbr_cmd);
 	free(pid);
-	return(code);
+	return (code);
 }
