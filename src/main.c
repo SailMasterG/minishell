@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saouissi <saouissi@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/13 13:01:33 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/07/20 19:40:01 by saouissi         ###   ########.fr       */
+/*   Created: 2026/10/16 14:06:14 by rpinheir          #+#    #+#             */
+/*   Updated: 2026/10/16 14:41:10 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,19 @@ void	show_prompt(t_shell *shell)
 			break ;
 		else if (line[0])
 		{
-			//if (shell->cmds)
-				//free cmds
-			printf("in line[0] !");
+			if (shell->cmds)
+				free_cmds(shell->cmds);
 			shell->cmds = parse(line, shell);
 			if (!shell->cmds)
 			{
 				free(line);
 				continue ;
 			}
-			// executor here
+			//executor(shell);
+			free(line);
 		}
 	}
+	free(line);
 }
 
 int	main(int ac, char **av, char **env)
@@ -68,9 +69,11 @@ int	main(int ac, char **av, char **env)
 	shell.pids = NULL;
 	shell.print_newline = true;
 	shell.env = enver(env);
-	show_prompt(&shell);
 	shell.cmds = NULL;
+	shell.exit_status = 0;
+	show_prompt(&shell);
 	if (shell.cmds)
-		printf("Free cmds");
+		free_cmds(shell.cmds);
+	ft_strfree(shell.env);
 	return (0);
 }
