@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes.h"
+#include "../../inc/include.h"
 /*
 void heredoc_resolve(t_cmd *cmd, int nb_cmd, int pid)
 {
@@ -21,9 +21,9 @@ void heredoc_resolve(t_cmd *cmd, int nb_cmd, int pid)
 	char *route_path;
 	char *path_temp;
 	int i;
-	
+
 	current = cmd;
-	
+
 	i = 0;
 	while(i < nb_cmd)
 	{
@@ -61,7 +61,7 @@ void heredoc_resolve(t_cmd *cmd, int nb_cmd, int pid)
 				}
 				free(line);
 				close(fd);
-				free(node->target); 
+				free(node->target);
 				node->target = route_path;
 			}
 			node = node->next;
@@ -75,7 +75,7 @@ static int count_cmd(t_cmd *cmd)
 {
 	t_cmd	*current;
 	int		count;
-	
+
 	count = 0;
 	current = cmd;
 	while(current != NULL)
@@ -96,7 +96,7 @@ int wait_pid(pid_t *pid, int nb_cmd)
 	i = 0;
 	pid_t last_pid = pid[nb_cmd - 1];
 	while(i < nb_cmd)
-	{	
+	{
 		caugth_pid = waitpid(pid[i], &status, 0);
 		if(caugth_pid == last_pid)
 		{
@@ -160,7 +160,7 @@ void resolve_all_paths(t_cmd *cmd, char **envp)
 {
     t_cmd *current;
     char **envp_routes;
-    
+
     envp_routes = extract_paths(envp);
     current = cmd;
     while(current != NULL)
@@ -174,13 +174,13 @@ void resolve_all_paths(t_cmd *cmd, char **envp)
     free(envp_routes);
 }
 
-int executor(t_cmd *cmd, char **envp)
+int executor(t_shell *shell)
 {
-	int nbr_cmd = count_cmd(cmd);
+	int nbr_cmd = count_cmd(shell->cmds);
 	int fd[2];
 	pid_t *pid;
 
-	int prev_fd; 
+	int prev_fd;
 	int i;
 	t_cmd *current;
 
@@ -191,14 +191,14 @@ int executor(t_cmd *cmd, char **envp)
 
 	i = 0;
 	prev_fd = -1;
-	current = cmd;
+	current = shell->cmds;
 	pid = malloc(sizeof(pid_t)*nbr_cmd);
 	if(pid ==NULL)
 	{
 		perror("malloc");
 		return(1);
 	}
-	heredoc_resolve(cmd, nbr_cmd, getpid());
+	heredoc_resolve(shell->cmds, nbr_cmd, getpid());
 	while (i < nbr_cmd)
 	{
 		if (i < nbr_cmd - 1)
@@ -276,14 +276,14 @@ int executor(t_cmd *cmd, char **envp)
 						exit(126);
 					}
 					unlink(node->file);
-					free(node->file); 
+					free(node->file);
 					dup2(fd_redir, STDIN_FILENO);
 					close(fd_redir);
 				}
 				node = node->next;
 			}
-			
-				execve(current->path, current->cmd_args, envp);
+
+				execve(current->path, current->cmd_args, shell->env);
 				perror("Error: ");
 				exit(127);
 		}

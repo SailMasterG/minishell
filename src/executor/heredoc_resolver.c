@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes.h"
+#include "../../inc/include.h"
 
 static void heredoc_readline(int fd, char *line, t_redir *node)
-{	
+{
 	while(1)
 	{
 		line = readline
@@ -36,7 +36,7 @@ static char *heredoc_path_temp(int i, int pid)
 	char	*prefix;
 	char	*pid_txt;
 	char	*id;
-	
+
 	pid_txt = ft_itoa(pid);
 	id = ft_itoa(i);
 	prefix = ft_strjoin(".sailmaster_",pid_txt);
@@ -68,7 +68,7 @@ static int is_heredoc(t_redir *node, int i, int pid)
 		}
 		heredoc_readline(fd, line, node);
 		close(fd);
-		free(node->file); 
+		free(node->file);
 		node->file = route_path_tmp;
 		return (1);
 	}
@@ -79,7 +79,7 @@ void heredoc_resolve(t_cmd *cmd, int nb_cmd, int pid)
 	t_cmd	*current;
 	t_redir	*node;
 	int		i;
-	
+
 	current = cmd;
 	i = 0;
 	while(i < nb_cmd)
@@ -89,7 +89,7 @@ void heredoc_resolve(t_cmd *cmd, int nb_cmd, int pid)
 		{
 			if(!is_heredoc(node, i, pid))
 			{
-				
+
 			}
 			node = node->next;
 		}
