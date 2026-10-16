@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/16 20:46:35 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/16 20:46:50 by chguerre         ###   ########.ch       */
+/*   Created: 2026/10/16 22:11:11 by chguerre          #+#    #+#             */
+/*   Updated: 2026/10/16 22:11:24 by chguerre         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	resolve_all_paths(t_cmd *cmd, char **envp);
 char	*find_cmd(char *cmd, char **paths_env);
 char	**extract_paths(char **envp);
 void	redirs_cmd(t_redir *node);
+void	childs_exit(t_shell *shell, int i, int *fd, int code);
+
 
 
 

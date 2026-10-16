@@ -5,12 +5,27 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/16 20:53:39 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/16 20:54:26 by chguerre         ###   ########.ch       */
+/*   Created: 2026/10/16 21:17:06 by chguerre          #+#    #+#             */
+/*   Updated: 2026/10/16 21:20:21 by chguerre         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
+
+static void free_paths(char **paths)
+{
+	int	i;
+
+	if (!paths)
+		return ;
+	i = 0;
+	while (paths[i] != NULL)
+	{
+		free(paths[i]);
+		i++;
+	}
+	free(paths);
+}
 
 char	**extract_paths(char **envp)
 {
@@ -74,5 +89,5 @@ void	resolve_all_paths(t_cmd *cmd, char **envp)
 			current->path = find_cmd(current->cmd_args[0], envp_routes);
 		current = current->next;
 	}
-	free(envp_routes);
+	free_paths(envp_routes);
 }
