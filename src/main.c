@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/16 12:57:39 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/16 13:03:46 by rpinheir         ###   ########.ch       */
+/*   Created: 2026/10/16 14:06:14 by rpinheir          #+#    #+#             */
+/*   Updated: 2026/10/16 14:22:40 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,6 @@ int	main(int ac, char **av, char **env)
 	show_prompt(&shell);
 	if (shell.cmds)
 		free_cmds(shell.cmds);
+	ft_strfree(shell.env);
 	return (0);
 }
