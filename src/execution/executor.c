@@ -6,7 +6,7 @@
 /*   By: chguerr <chguerr@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 05:43:32 by chguerr           #+#    #+#             */
-/*   Updated: 2026/09/21 05:58:11 by chguerr          ###   ########.ch       */
+/*   Updated: 2026/10/16 14:24:10 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,7 +286,7 @@ int executor(t_shell *shell)
 				node = node->next;
 			}
 				execve(current->path, current->cmd_args, shell->env);
-				perror("Error: ");
+				perror("Error");
 				exit(127);
 		}
 		while(node != NULL)
