@@ -19,7 +19,9 @@ SRC = main.c \
 	  parsing/build_cmds.c \
 	  parsing/word_split.c \
 	  parsing/debug_cmd.c \
-	  parsing/debug_redir.c
+	  parsing/debug_redir.c \
+	\
+      execution/executor.c
 
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 

@@ -47,16 +47,17 @@ void	show_prompt(t_shell *shell)
 		{
 			if (shell->cmds)
 				free_cmds(shell->cmds);
-			printf("in line[0] !");
 			shell->cmds = parse(line, shell);
 			if (!shell->cmds)
 			{
 				free(line);
 				continue ;
 			}
-			// executor here
+			executor(shell);
+			free(line);
 		}
 	}
+	free(line);
 }
 
 int	main(int ac, char **av, char **env)
@@ -69,8 +70,7 @@ int	main(int ac, char **av, char **env)
 	shell.print_newline = true;
 	shell.env = enver(env);
 	show_prompt(&shell);
-	shell.cmds = NULL;
 	if (shell.cmds)
-		printf("Free cmds");
+		free_cmds(shell.cmds);
 	return (0);
 }

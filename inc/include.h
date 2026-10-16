@@ -82,6 +82,7 @@ typedef struct s_redir
 typedef struct s_cmd
 {
 	char			**cmd_args;
+	char			*path;
 	t_redir			*redirections;
 	struct s_cmd	*next;
 }				t_cmd;
@@ -124,7 +125,9 @@ bool			is_redir(t_token *tokens);
 void			mark_range(char *s);
 int				count_fields(char *value);
 
-void	debug_cmds(t_cmd *cmds);
-void	debug_redirs(t_cmd *cmd, int fd);
-void	debug_tokens(t_token *tokens, char *line);
+void			debug_cmds(t_cmd *cmds);
+void			debug_redirs(t_cmd *cmd, int fd);
+void			debug_tokens(t_token *tokens, char *line);
+int				executor(t_shell *shell);
+
 #endif
