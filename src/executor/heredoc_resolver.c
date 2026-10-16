@@ -72,6 +72,7 @@ static int is_heredoc(t_redir *node, int i, int pid)
 		node->file = route_path_tmp;
 		return (1);
 	}
+	return (0);
 }
 
 void heredoc_resolve(t_cmd *cmd, int nb_cmd, int pid)
