@@ -6,7 +6,7 @@
 /*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 21:02:10 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/16 21:04:30 by chguerre         ###   ########.ch       */
+/*   Updated: 2026/10/16 21:06:35 by chguerre         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ t_cmd	*build_one_cmd(t_token **tokens)
 	if (!cmds)
 		return (NULL);
 	cmds->next = NULL;
+	cmds->path = NULL;
 	cmds->redirections = NULL;
 	cmds->cmd_args = malloc(sizeof(char *) * (count_args(*tokens) + 1));
 	if (!cmds->cmd_args)
