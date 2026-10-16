@@ -6,7 +6,7 @@
 /*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 22:11:29 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/16 22:20:36 by chguerre         ###   ########.ch       */
+/*   Updated: 2026/10/16 22:27:46 by chguerre         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ int pipe_creator(t_shell *shell, int i, int *fd, pid_t *pid)
 		{
 			perror("pipe");
 			free(pid);
-			return (1);
+			return (0);
 		}
 	}
-	return (0);
+	return (1);
 }
 
 static void setup_child_pipes(t_shell *shell, int i, int *fd)
@@ -84,7 +84,7 @@ int fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
 	{
 		perror("fork");
 		free(shell->pids);
-		return (1);
+		return (0);
 	}
 	if (shell->pids[i] == 0)
 	{
@@ -101,7 +101,7 @@ int fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
 			childs_exit(shell, i, fd, 127);
 		}
 	}
-	return (0);
+	return (1);
 }
 
 int exec_loop(t_shell *shell, int *fd, t_cmd *current)
@@ -112,8 +112,9 @@ int exec_loop(t_shell *shell, int *fd, t_cmd *current)
 	while (i < shell->cmd_count)
 	{
 		if (!pipe_creator(shell, i, fd, shell->pids))
-			return (1);
-		fork_setup(shell, i, fd, current);
+			return (0);
+		if(!fork_setup(shell, i, fd, current))
+			return (0);
 		if (current->next != NULL)
 			current = current->next;
 		if (shell->prevfd != -1)
@@ -125,7 +126,7 @@ int exec_loop(t_shell *shell, int *fd, t_cmd *current)
 		}
 		i++;
 	}
-	return (0);
+	return (1);
 }
 
 int	executor(t_shell *shell)
@@ -150,8 +151,12 @@ int	executor(t_shell *shell)
 		free(shell->pids);
 		return (1);
 	}
-	exec_loop(shell, fd, current);
+	if (!exec_loop(shell, fd, current))
+	{
+		free(shell->pids);
+		return (1);
+	}
 	code = wait_pid(shell->pids, shell->cmd_count);
-	free(shell->pids);
+
 	return (code);
 }
