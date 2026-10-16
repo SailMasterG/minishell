@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerr <chguerr@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 05:43:32 by chguerr           #+#    #+#             */
-/*   Updated: 2026/09/21 05:58:11 by chguerr          ###   ########.ch       */
+/*   Updated: 2026/10/14 15:46:13 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
+#include "includes.h"
+/*
 void heredoc_resolve(t_cmd *cmd, int nb_cmd, int pid)
 {
 	int fd;
@@ -27,7 +27,7 @@ void heredoc_resolve(t_cmd *cmd, int nb_cmd, int pid)
 	i = 0;
 	while(i < nb_cmd)
 	{
-		node = current->redir;
+		node = current->redirections;
 		while(node != NULL)
 		{
 			if(node->type == REDIR_HEREDOC)
@@ -70,7 +70,7 @@ void heredoc_resolve(t_cmd *cmd, int nb_cmd, int pid)
 		i++;
 	}
 }
-
+*/
 static int count_cmd(t_cmd *cmd)
 {
 	t_cmd	*current;
@@ -189,7 +189,6 @@ int executor(t_cmd *cmd, char **envp)
 	int code;
 	code = 0;
 
-
 	i = 0;
 	prev_fd = -1;
 	current = cmd;
@@ -202,17 +201,16 @@ int executor(t_cmd *cmd, char **envp)
 	heredoc_resolve(cmd, nbr_cmd, getpid());
 	while (i < nbr_cmd)
 	{
-		
 		if (i < nbr_cmd - 1)
 		{
 			if (pipe(fd) == -1)
 			{
-			perror("pipe");
-			free(pid);
-			return (1);
+				perror("pipe");
+				free(pid);
+				return (1);
 			}
 		}
-		node = current->redir;
+		node = current->redirections;
 		pid[i] = fork();
 		if (pid[i] == -1)
 		{
@@ -238,7 +236,7 @@ int executor(t_cmd *cmd, char **envp)
 				fd_redir = -1;
 				if(node->type == REDIR_IN)
 				{
-					fd_redir = open(node->target, O_RDONLY);
+					fd_redir = open(node->file, O_RDONLY);
 					if(fd_redir < 0)
 					{
 						perror("Error de lectura de archivo");
@@ -249,7 +247,7 @@ int executor(t_cmd *cmd, char **envp)
 				}
 				else if (node->type == REDIR_OUT)
 				{
-					fd_redir = open(node->target, O_WRONLY | O_CREAT | O_TRUNC , 0644);
+					fd_redir = open(node->file, O_WRONLY | O_CREAT | O_TRUNC , 0644);
 					if(fd_redir < 0)
 					{
 						perror("Error de lectura de archivo");
@@ -260,7 +258,7 @@ int executor(t_cmd *cmd, char **envp)
 				}
 				else if (node->type == REDIR_APPEND)
 				{
-					fd_redir = open(node->target, O_WRONLY | O_CREAT | O_APPEND, 0644);
+					fd_redir = open(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 					if(fd_redir < 0)
 					{
 						perror("Error de lectura de archivo");
@@ -271,28 +269,28 @@ int executor(t_cmd *cmd, char **envp)
 				}
 				else if (node->type == REDIR_HEREDOC)
 				{
-					fd_redir = open(node->target, O_RDONLY);
+					fd_redir = open(node->file, O_RDONLY);
 					if(fd_redir < 0)
 					{
 						perror("Error de lectura de archivo 2");
 						exit(126);
 					}
-					unlink(node->target);
-					free(node->target); 
+					unlink(node->file);
+					free(node->file); 
 					dup2(fd_redir, STDIN_FILENO);
 					close(fd_redir);
 				}
-				
 				node = node->next;
 			}
-				execve(current->path, current->args, envp);
+			
+				execve(current->path, current->cmd_args, envp);
 				perror("Error: ");
 				exit(127);
 		}
 		while(node != NULL)
 		{
 			if(node->type == REDIR_HEREDOC)
-				free(node->target);
+				free(node->file);
 			node = node->next;
 		}
 		if(current->next != NULL)

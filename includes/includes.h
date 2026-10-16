@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   includes.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerr <chguerr@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 23:27:00 by chguerr           #+#    #+#             */
-/*   Updated: 2026/09/08 23:27:22 by chguerr          ###   ########.ch       */
+/*   Updated: 2026/10/14 14:58:23 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@
 
 typedef struct s_redir
 {
-	int				type;
-	char			*target;
+	t_redir_type	type;
+	char			*file;
 	struct s_redir	*next;
 }	t_redir;
 
 typedef struct s_cmd
 {
-	char				**args;
+	char				**cmd_args;
 	char				*path;
-	t_redir				*redir;
+	t_redir				*redirections;
 	struct s_cmd		*next;
 
 }	t_cmd;
