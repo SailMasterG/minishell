@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saouissi <saouissi@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/13 13:01:33 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/07/20 19:40:01 by saouissi         ###   ########.fr       */
+/*   Created: 2026/10/16 12:57:39 by rpinheir          #+#    #+#             */
+/*   Updated: 2026/10/16 13:03:46 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void	show_prompt(t_shell *shell)
 			break ;
 		else if (line[0])
 		{
-			//if (shell->cmds)
-				//free cmds
+			if (shell->cmds)
+				free_cmds(shell->cmds);
 			printf("in line[0] !");
 			shell->cmds = parse(line, shell);
 			if (!shell->cmds)
