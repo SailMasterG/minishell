@@ -53,7 +53,7 @@ void	show_prompt(t_shell *shell)
 				free(line);
 				continue ;
 			}
-			executor(shell);
+			//executor(shell);
 			free(line);
 		}
 	}
