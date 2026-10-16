@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/16 21:00:58 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/16 21:00:58 by chguerre         ###   ########.ch       */
+/*   Created: 2026/10/16 21:21:52 by chguerre          #+#    #+#             */
+/*   Updated: 2026/10/16 21:36:11 by chguerre         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	wait_pid(pid_t *pid, int nb_cmd)
 
 	last_pid = pid[nb_cmd - 1];
 	i = 0;
+	code = 0;
 	while (i < nb_cmd)
 	{
 		caugth_pid = waitpid(pid[i], &status, 0);
@@ -49,7 +50,6 @@ int pipe_creator(t_shell *shell, int i, int *fd, pid_t *pid)
 	}
 	return (0);
 }
-
 
 int	executor(t_shell *shell)
 {
@@ -93,16 +93,29 @@ int	executor(t_shell *shell)
 		{
 			if (shell->prevfd != -1)
 			{
-				dup2(shell->prevfd, STDIN_FILENO);
+				if(dup2(shell->prevfd, STDIN_FILENO) == -1)
+				{
+					perror("dup2");
+					exit(1);
+				}
 				close(shell->prevfd);
 			}
 			if (i < shell->cmd_count - 1)
 			{
-				dup2(fd[1], STDOUT_FILENO);
+				if(dup2(fd[1], STDOUT_FILENO) == -1)
+				{
+					perror("dup2");
+					exit(1);
+				}
 				close(fd[0]);
 				close(fd[1]);
 			}
 			redirs_cmd(node);
+			if (current->path == NULL)
+			{
+				ft_printf("Error: command not found: %s\n", current->cmd_args[0]);
+				exit(127);
+			}
 			if ((execve(current->path, current->cmd_args, shell->env)) == -1)
 			{
 				perror("Error: ");
