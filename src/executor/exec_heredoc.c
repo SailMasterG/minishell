@@ -12,13 +12,19 @@
 
 #include "../../inc/include.h"
 
-static void	heredoc_readline(int fd, char *line, t_redir *node)
+static int	heredoc_readline(int fd, char *line, t_redir *node)
 {
 	while (1)
 	{
+		g_signal = 0;
 		line = readline("heredoc>");
 		if (line == NULL)
 			break ;
+		if(g_signal == 2)
+		{
+			free(line);
+			return (0);
+		}
 		if (ft_strncmp(line, node->file, ft_strlen(node->file) + 1) == 0)
 			break ;
 		write(fd, line, ft_strlen(line));
@@ -26,6 +32,7 @@ static void	heredoc_readline(int fd, char *line, t_redir *node)
 		free(line);
 	}
 	free(line);
+	return (1);
 }
 
 static char	*heredoc_path_temp(int i, int pid)
@@ -65,7 +72,15 @@ static int	is_heredoc(t_redir *node, int i, int pid)
 			free(route_path_tmp);
 			return (0);
 		}
-		heredoc_readline(fd, line, node);
+		if(!heredoc_readline(fd, line, node))
+		{
+			close(fd);
+			free(node->file);
+			unlink(route_path_tmp);
+			free(route_path_tmp);
+			node->file = NULL;
+			return (0);
+		}
 		close(fd);
 		free(node->file);
 		node->file = route_path_tmp;
@@ -82,6 +97,7 @@ int	exec_heredoc(t_cmd *cmd, int nb_cmd, int pid)
 
 	current = cmd;
 	i = 0;
+	set_signal_mode(HEREDOC);
 	while (i < nb_cmd)
 	{
 		node = current->redirections;
