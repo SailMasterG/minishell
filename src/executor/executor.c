@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 05:43:32 by chguerr           #+#    #+#             */
-/*   Updated: 2026/10/14 15:46:13 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/19 13:27:08 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ int	executor(t_shell *shell)
 	prev_fd = -1;
 	current = shell->cmds;
 	pid = malloc(sizeof(pid_t) * nbr_cmd);
+	set_signal_mode(EXECUTION);
 	if (pid == NULL)
 	{
 		perror("malloc");
@@ -166,6 +167,7 @@ int	executor(t_shell *shell)
 		}
 		if (pid[i] == 0)
 		{
+			set_signal_mode(FORKED);
 			if (prev_fd != -1)
 			{
 				dup2(prev_fd, STDIN_FILENO);
@@ -236,6 +238,7 @@ int	executor(t_shell *shell)
 				exit(127);
 			}
 		}
+		set_signal_mode(EXECUTION);
 		while (node != NULL)
 		{
 			if (node->type == REDIR_HEREDOC)

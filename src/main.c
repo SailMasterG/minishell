@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 14:06:14 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/16 14:41:10 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/19 13:28:31 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	show_prompt(t_shell *shell)
 {
 	char	*line;
 
+	set_signal_mode(INTERACTIVE);
 	while (1)
 	{
 		line = readline("Minishell: ");

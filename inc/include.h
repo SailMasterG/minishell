@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 14:18:12 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/16 14:19:24 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/19 13:24:41 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef INCLUDE_H
@@ -29,4 +29,5 @@
 # include "parse.h"
 # include "exec.h"
 
+void	set_signal_mode(t_signal_modes mode);
 #endif
