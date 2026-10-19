@@ -1,5 +1,5 @@
 name: C/C++ CI
-
+# Should only work on main
 on:
   push:
     branches: [ "main" ]
