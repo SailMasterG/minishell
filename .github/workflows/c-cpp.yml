@@ -13,9 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v5
-    - name: minishell
-      run: ./minishell
+
     - name: make
       run: make
-    - name: make re
-      run: make re
+    - name: minishell
+      run: ./minishell
