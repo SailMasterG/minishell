@@ -23,6 +23,9 @@ char	*find_cmd(char *cmd, char **paths_env);
 char	**extract_paths(char **envp);
 void	redirs_cmd(t_redir *node);
 void	childs_exit(t_shell *shell, int i, int *fd, int code);
+int		fork_setup(t_shell *shell, int i, int *fd, t_cmd *current);
+int		wait_pid(pid_t *pid, int nb_cmd);
+void	setup_child_pipes(t_shell *shell, int i, int *fd);
 
 
 
