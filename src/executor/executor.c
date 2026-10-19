@@ -88,6 +88,7 @@ int fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
 	}
 	if (shell->pids[i] == 0)
 	{
+		set_signal_mode(FORKED);
 		setup_child_pipes(shell, i, fd);
 		redirs_cmd(node);
 		if (current->path == NULL)
@@ -126,6 +127,7 @@ int exec_loop(t_shell *shell, int *fd, t_cmd *current)
 		}
 		i++;
 	}
+	set_signal_mode(EXECUTION);
 	return (1);
 }
 
@@ -151,6 +153,7 @@ int	executor(t_shell *shell)
 	shell->cmd_count = count_cmd(shell->cmds);
 	shell->prevfd = -1;
 	current = shell->cmds;
+	set_signal_mode(EXECUTION);
 	if(!malloc_pids(shell))
 		return(1);
 	if (!exec_heredoc(shell->cmds, shell->cmd_count, getpid()))

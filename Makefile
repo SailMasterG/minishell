@@ -10,6 +10,7 @@ CFLAGS = -Wall -Wextra -Werror -I$(INCDIR) -I$(LIBFT_DIR) -Wshadow -Wstrict-prot
 VAL_FLAGS  = -g3 -O0
 ASAN_FLAGS = -fsanitize=address,undefined -fno-omit-frame-pointer
 SRC = main.c \
+	  signals.c \
 	  parsing/expansion.c \
 	  parsing/parser.c \
 	  parsing/lexer.c \
