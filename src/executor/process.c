@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/19 20:36:59 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/19 21:05:45 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/19 21:31:54 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void childs_exit(t_shell *shell, int i, int *fd, int code)
 	}
 	if (shell->pids != NULL)
 		free(shell->pids);
-	free (shell->env);
+	ft_strfree(shell->env);
 	free_cmds(shell->cmds);
 	exit(code);
 }

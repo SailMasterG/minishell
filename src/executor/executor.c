@@ -75,5 +75,6 @@ int	executor(t_shell *shell)
 	}
 	code = wait_pid(shell->pids, shell->cmd_count);
 	free(shell->pids);
+	shell->exit_status = code;
 	return (code);
 }
