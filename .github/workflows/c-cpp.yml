@@ -13,7 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v5
-
+    - name: readline
+      run: sudo apt-get install lib32readline7 lib32readline-dev 
     - name: make
       run: make
     - name: minishell
