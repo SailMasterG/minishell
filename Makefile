@@ -10,6 +10,7 @@ CFLAGS = -Wall -Wextra -Werror -I$(INCDIR) -I$(LIBFT_DIR) -Wshadow -Wstrict-prot
 VAL_FLAGS  = -g3 -O0
 ASAN_FLAGS = -fsanitize=address,undefined -fno-omit-frame-pointer
 SRC = main.c \
+	  signals.c \
 	  parsing/expansion.c \
 	  parsing/parser.c \
 	  parsing/lexer.c \
@@ -19,8 +20,7 @@ SRC = main.c \
 	  parsing/build_cmds.c \
 	  parsing/word_split.c \
 	  parsing/debug_cmd.c \
-	  parsing/debug_redir.c \
-	  signals.c
+	  parsing/debug_redir.c
 
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 
