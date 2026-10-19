@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/19 12:47:32 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/19 13:26:45 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/19 20:20:41 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "../inc/include.h"
 #include <signal.h>
 
@@ -23,7 +24,10 @@ void	sigquit_handler(int signal, t_shell *shell)
 void	sigint_handler(int signal)
 {
 	(void)signal;
-	ft_putstr_fd("Quit (core dumped)\n", 1);
+	ft_putstr_fd("\n", 1); // we can use write? because this funcition use
+	rl_on_new_line();         // 2. Tell to Readline: "we are in newline"
+	rl_replace_line("", 0);   // 3. Empty the text that user was write
+	rl_redisplay();
 }
 
 void	set_signal_mode(t_signal_modes mode)
