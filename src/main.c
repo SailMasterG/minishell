@@ -38,12 +38,20 @@ void	show_prompt(t_shell *shell)
 {
 	char	*line;
 
-	set_signal_mode(INTERACTIVE);
 	while (1)
 	{
+		set_signal_mode(INTERACTIVE);
 		line = readline("Minishell: ");
-		if (!line || line[0] == 0)
+		if (!line)
+		{
+			write(1, "exit\n", 5);
 			break ;
+		}
+		if(line[0] == '\0')
+		{
+			free(line);
+			continue;
+		}
 		else if (line[0])
 		{
 			if (shell->cmds)
