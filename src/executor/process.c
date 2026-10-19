@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/19 20:36:59 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/19 20:39:00 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/19 21:05:45 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,24 +54,11 @@ int	wait_pid(pid_t *pid, int nb_cmd)
 	}
 	return (code);
 }
-
-int fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
+static void run_child(t_shell *shell, int i, int *fd, t_cmd *current)
 {
-	t_redir	*node;
-
-	node = current->redirections;
-	shell->pids[i] = fork();
-	if (shell->pids[i] == -1)
-	{
-		perror("fork");
-		free(shell->pids);
-		return (0);
-	}
-	if (shell->pids[i] == 0)
-	{
 		set_signal_mode(FORKED);
 		setup_child_pipes(shell, i, fd);
-		redirs_cmd(node);
+		redirs_cmd(current->redirections);
 		if (current->path == NULL)
 		{
 			ft_printf("Error: command not found: %s\n", current->cmd_args[0]);
@@ -82,6 +69,17 @@ int fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
 			perror("Error: ");
 			childs_exit(shell, i, fd, 127);
 		}
+}
+
+int fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
+{
+	shell->pids[i] = fork();
+	if (shell->pids[i] == -1)
+	{
+		perror("fork");
+		return (0);
 	}
+	if (shell->pids[i] == 0)
+		run_child(shell, i, fd, current);
 	return (1);
 }

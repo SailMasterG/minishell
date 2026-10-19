@@ -26,7 +26,8 @@ SRC = main.c \
 	  executor/exec_redir.c \
 	  executor/exec_heredoc.c \
 	  executor/exec_path.c \
-	  executor/process.c
+	  executor/process.c \
+	  executor/pipes.c
 
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 
