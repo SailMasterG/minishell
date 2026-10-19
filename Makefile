@@ -20,7 +20,12 @@ SRC = main.c \
 	  parsing/build_cmds.c \
 	  parsing/word_split.c \
 	  parsing/debug_cmd.c \
-	  parsing/debug_redir.c
+	  parsing/debug_redir.c \
+	  executor/executor.c \
+	  executor/exec_utils.c \
+	  executor/exec_redir.c \
+	  executor/exec_heredoc.c \
+	  executor/exec_path.c
 
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 
@@ -56,7 +61,7 @@ $(NAME): $(OBJ) $(LIBFT)
 	@$(CC) $(CFLAGS) -L$(LIBFT_DIR) $(OBJ) $(LIBFT) -lreadline -lncurses -o $(NAME)
 
 $(OBJDIR):
-	@mkdir -p $(OBJDIR)/execution $(OBJDIR)/parsing $(OBJDIR)/builtins
+	@mkdir -p $(OBJDIR)/executor $(OBJDIR)/parsing $(OBJDIR)/builtins
 
 $(LIBFT):
 	@$(MAKE) --silent -C $(LIBFT_DIR)

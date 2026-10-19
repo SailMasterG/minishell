@@ -14,6 +14,7 @@ texto.txt
 *.log
 vgcore.*
 .mini_cnt
+._cnt
 
 # Editor / System files
 .vscode/

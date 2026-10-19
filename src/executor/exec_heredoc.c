@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc_resolver.c                                 :+:      :+:    :+:   */
+/*   exec_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yourlogin <youremail@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/16 17:54:44 by yourlogin         #+#    #+#             */
-/*   Updated: 2026/10/16 17:54:44 by yourlogin        ###   ########.ch       */
+/*   Created: 2026/10/16 22:32:59 by chguerre          #+#    #+#             */
+/*   Updated: 2026/10/16 22:32:59 by chguerre         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ static int	is_heredoc(t_redir *node, int i, int pid)
 		node->file = route_path_tmp;
 		return (1);
 	}
-	return (0);
+	return (1);
 }
 
-int	heredoc_resolve(t_cmd *cmd, int nb_cmd, int pid)
+int	exec_heredoc(t_cmd *cmd, int nb_cmd, int pid)
 {
 	t_cmd	*current;
 	t_redir	*node;

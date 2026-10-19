@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
+/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/09/21 05:43:32 by chguerr           #+#    #+#             */
-/*   Updated: 2026/10/19 13:27:08 by rpinheir         ###   ########.ch       */
+/*   Created: 2026/10/16 22:35:03 by chguerre          #+#    #+#             */
+/*   Updated: 2026/10/16 22:37:15 by chguerre         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
-
-static int	count_cmd(t_cmd *cmd)
-{
-	t_cmd	*current;
-	int		count;
-
-	count = 0;
-	current = cmd;
-	while (current != NULL)
-	{
-		current = current->next;
-		count++;
-	}
-	return (count);
-}
 
 int	wait_pid(pid_t *pid, int nb_cmd)
 {
@@ -37,6 +22,7 @@ int	wait_pid(pid_t *pid, int nb_cmd)
 
 	last_pid = pid[nb_cmd - 1];
 	i = 0;
+	code = 0;
 	while (i < nb_cmd)
 	{
 		caugth_pid = waitpid(pid[i], &status, 0);
@@ -52,211 +38,135 @@ int	wait_pid(pid_t *pid, int nb_cmd)
 	return (code);
 }
 
-char	**extract_paths(char **envp)
+int pipe_creator(t_shell *shell, int i, int *fd, pid_t *pid)
 {
-	int		i;
-	char	**paths_env;
-
-	paths_env = NULL;
-	i = 0;
-	while (envp[i] != NULL)
+	if (i < shell->cmd_count - 1)
 	{
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+		if (pipe(fd) == -1)
 		{
-			paths_env = ft_split(envp[i] + 5, ':');
-			break ;
+			perror("pipe");
+			free(pid);
+			return (0);
+		}
+	}
+	return (1);
+}
+
+static void setup_child_pipes(t_shell *shell, int i, int *fd)
+{
+	if (shell->prevfd != -1)
+	{
+		if(dup2(shell->prevfd, STDIN_FILENO) == -1)
+		{
+			perror("dup2");
+			childs_exit(shell, i, fd, 1);
+		}
+		close(shell->prevfd);
+	}
+	if (i < shell->cmd_count - 1)
+	{
+		if(dup2(fd[1], STDOUT_FILENO) == -1)
+		{
+			perror("dup2");
+			childs_exit(shell, i, fd, 1);
+		}
+		close(fd[0]);
+		close(fd[1]);
+	}
+}
+int fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
+{
+	t_redir	*node;
+
+	node = current->redirections;
+	shell->pids[i] = fork();
+	if (shell->pids[i] == -1)
+	{
+		perror("fork");
+		free(shell->pids);
+		return (0);
+	}
+	if (shell->pids[i] == 0)
+	{
+		set_signal_mode(FORKED);
+		setup_child_pipes(shell, i, fd);
+		redirs_cmd(node);
+		if (current->path == NULL)
+		{
+			ft_printf("Error: command not found: %s\n", current->cmd_args[0]);
+			childs_exit(shell, i, fd, 127);
+		}
+		if ((execve(current->path, current->cmd_args, shell->env)) == -1)
+		{
+			perror("Error: ");
+			childs_exit(shell, i, fd, 127);
+		}
+	}
+	return (1);
+}
+
+int exec_loop(t_shell *shell, int *fd, t_cmd *current)
+{
+	int i;
+
+	i = 0;
+	while (i < shell->cmd_count)
+	{
+		if (!pipe_creator(shell, i, fd, shell->pids))
+			return (0);
+		if(!fork_setup(shell, i, fd, current))
+			return (0);
+		if (current->next != NULL)
+			current = current->next;
+		if (shell->prevfd != -1)
+			close(shell->prevfd);
+		if (i < shell->cmd_count - 1)
+		{
+			close(fd[1]);
+			shell->prevfd = fd[0];
 		}
 		i++;
 	}
-	if (!paths_env)
-	{
-		ft_printf("Error: PATH not found in environment variables.\n");
-		return (NULL);
-	}
-	return (paths_env);
+	set_signal_mode(EXECUTION);
+	return (1);
 }
 
-char	*find_cmd(char *cmd, char **paths_env)
-{
-	char	*path;
-	char	*tmp;
-	int		i;
-
-	if (!cmd || !paths_env)
-		return (NULL);
-	i = 0;
-	while (paths_env[i] != NULL)
+static int malloc_pids(t_shell *shell)
+{	
+	shell->pids = malloc(sizeof(pid_t) * shell->cmd_count);
+	if (shell->pids == NULL)
 	{
-		tmp = ft_strjoin(paths_env[i], "/");
-		path = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(path, F_OK) == 0)
-			return (path);
-		free(path);
-		i++;
+		perror("malloc");
+		return (0);
 	}
-	return (NULL);
-}
-
-void	resolve_all_paths(t_cmd *cmd, char **envp)
-{
-	t_cmd	*current;
-	char	**envp_routes;
-
-	envp_routes = extract_paths(envp);
-	current = cmd;
-	while (current != NULL)
-	{
-		if (current->cmd_args[0][0] == '/'
-			|| ft_strchr(current->cmd_args[0], '/'))
-			current->path = current->cmd_args[0];
-		else
-			current->path = find_cmd(current->cmd_args[0], envp_routes);
-		current = current->next;
-	}
-	free(envp_routes);
+	return (1);
 }
 
 int	executor(t_shell *shell)
 {
-	int		nbr_cmd;
 	int		fd[2];
-	pid_t	*pid;
-	int		prev_fd;
-	int		i;
 	t_cmd	*current;
-	t_redir	*node;
-	int		fd_redir;
 	int		code;
 
 	code = 0;
-	i = 0;
-	nbr_cmd = count_cmd(shell->cmds);
-	prev_fd = -1;
+	resolve_all_paths(shell->cmds, shell->env);
+	shell->cmd_count = count_cmd(shell->cmds);
+	shell->prevfd = -1;
 	current = shell->cmds;
-	pid = malloc(sizeof(pid_t) * nbr_cmd);
 	set_signal_mode(EXECUTION);
-	if (pid == NULL)
+	if(!malloc_pids(shell))
+		return(1);
+	if (!exec_heredoc(shell->cmds, shell->cmd_count, getpid()))
 	{
-		perror("malloc");
+		free(shell->pids);
 		return (1);
 	}
-	if (!heredoc_resolve(shell->cmds, nbr_cmd, getpid()))
+	if (!exec_loop(shell, fd, current))
 	{
-		free(pid);
+		free(shell->pids);
 		return (1);
 	}
-	while (i < nbr_cmd)
-	{
-		if (i < nbr_cmd - 1)
-		{
-			if (pipe(fd) == -1)
-			{
-				perror("pipe");
-				free(pid);
-				return (1);
-			}
-		}
-		node = current->redirections;
-		pid[i] = fork();
-		if (pid[i] == -1)
-		{
-			perror("fork");
-			free(pid);
-			return (1);
-		}
-		if (pid[i] == 0)
-		{
-			set_signal_mode(FORKED);
-			if (prev_fd != -1)
-			{
-				dup2(prev_fd, STDIN_FILENO);
-				close(prev_fd);
-			}
-			if (i < nbr_cmd - 1)
-			{
-				dup2(fd[1], STDOUT_FILENO);
-				close(fd[0]);
-				close(fd[1]);
-			}
-			while (node != NULL)
-			{
-				fd_redir = -1;
-				if (node->type == REDIR_IN)
-				{
-					fd_redir = open(node->file, O_RDONLY);
-					if (fd_redir < 0)
-					{
-						perror("Error de lectura de archivo");
-						exit(126);
-					}
-					dup2(fd_redir, STDIN_FILENO);
-					close(fd_redir);
-				}
-				else if (node->type == REDIR_OUT)
-				{
-					fd_redir = open(node->file,
-							O_WRONLY | O_CREAT | O_TRUNC, 0644);
-					if (fd_redir < 0)
-					{
-						perror("Error de lectura de archivo");
-						exit(126);
-					}
-					dup2(fd_redir, STDOUT_FILENO);
-					close(fd_redir);
-				}
-				else if (node->type == REDIR_APPEND)
-				{
-					fd_redir = open(node->file,
-							O_WRONLY | O_CREAT | O_APPEND, 0644);
-					if (fd_redir < 0)
-					{
-						perror("Error de lectura de archivo");
-						exit(126);
-					}
-					dup2(fd_redir, STDOUT_FILENO);
-					close(fd_redir);
-				}
-				else if (node->type == REDIR_HEREDOC)
-				{
-					fd_redir = open(node->file, O_RDONLY);
-					if (fd_redir < 0)
-					{
-						perror("Error de lectura de archivo 2");
-						exit(126);
-					}
-					unlink(node->file);
-					free(node->file);
-					dup2(fd_redir, STDIN_FILENO);
-					close(fd_redir);
-				}
-				node = node->next;
-			}
-			if ((execve(current->path, current->cmd_args, shell->env)) == -1)
-			{
-				perror("Error: ");
-				exit(127);
-			}
-		}
-		set_signal_mode(EXECUTION);
-		while (node != NULL)
-		{
-			if (node->type == REDIR_HEREDOC)
-				free(node->file);
-			node = node->next;
-		}
-		if (current->next != NULL)
-			current = current->next;
-		if (prev_fd != -1)
-			close(prev_fd);
-		if (i < nbr_cmd - 1)
-		{
-			close(fd[1]);
-			prev_fd = fd[0];
-		}
-		i++;
-	}
-	code = wait_pid(pid, nbr_cmd);
-	free(pid);
+	code = wait_pid(shell->pids, shell->cmd_count);
+	free(shell->pids);
 	return (code);
 }

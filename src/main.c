@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 14:06:14 by rpinheir          #+#    #+#             */
 /*   Updated: 2026/10/19 13:28:31 by rpinheir         ###   ########.ch       */
@@ -38,12 +38,20 @@ void	show_prompt(t_shell *shell)
 {
 	char	*line;
 
-	set_signal_mode(INTERACTIVE);
 	while (1)
 	{
+		set_signal_mode(INTERACTIVE);
 		line = readline("Minishell: ");
-		if (!line || line[0] == 0)
+		if (!line)
+		{
+			write(1, "exit\n", 5);
 			break ;
+		}
+		if(line[0] == '\0')
+		{
+			free(line);
+			continue;
+		}
 		else if (line[0])
 		{
 			if (shell->cmds)
@@ -54,7 +62,7 @@ void	show_prompt(t_shell *shell)
 				free(line);
 				continue ;
 			}
-			//executor(shell);
+			executor(shell);
 			free(line);
 		}
 	}
