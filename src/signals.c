@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "../inc/include.h"
-#include "signal.h"
+#include <signal.h>
 
 void	sigquit_handler(int signal, t_shell *shell)
 {
