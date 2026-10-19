@@ -129,6 +129,17 @@ int exec_loop(t_shell *shell, int *fd, t_cmd *current)
 	return (1);
 }
 
+static int malloc_pids(t_shell *shell)
+{	
+	shell->pids = malloc(sizeof(pid_t) * shell->cmd_count);
+	if (shell->pids == NULL)
+	{
+		perror("malloc");
+		return (0);
+	}
+	return (1);
+}
+
 int	executor(t_shell *shell)
 {
 	int		fd[2];
@@ -140,12 +151,8 @@ int	executor(t_shell *shell)
 	shell->cmd_count = count_cmd(shell->cmds);
 	shell->prevfd = -1;
 	current = shell->cmds;
-	shell->pids = malloc(sizeof(pid_t) * shell->cmd_count);
-	if (shell->pids == NULL)
-	{
-		perror("malloc");
-		return (1);
-	}
+	if(!malloc_pids(shell))
+		return(1);
 	if (!exec_heredoc(shell->cmds, shell->cmd_count, getpid()))
 	{
 		free(shell->pids);
