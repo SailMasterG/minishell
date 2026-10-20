@@ -100,6 +100,7 @@ int fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
 		{
 			perror("Error: ");
 			childs_exit(shell, i, fd, 127);
+			ft_strfree(shell->env);
 		}
 	}
 	return (1);
@@ -132,7 +133,7 @@ int exec_loop(t_shell *shell, int *fd, t_cmd *current)
 }
 
 static int malloc_pids(t_shell *shell)
-{	
+{
 	shell->pids = malloc(sizeof(pid_t) * shell->cmd_count);
 	if (shell->pids == NULL)
 	{
