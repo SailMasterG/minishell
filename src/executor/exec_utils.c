@@ -38,7 +38,7 @@ void childs_exit(t_shell *shell, int i, int *fd, int code)
 	}
 	if (shell->pids != NULL)
 		free(shell->pids);
-	free (shell->env);
+	ft_strfree(shell->env);
 	free_cmds(shell->cmds);
 	exit(code);
 }

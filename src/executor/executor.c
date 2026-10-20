@@ -100,7 +100,6 @@ int fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
 		{
 			perror("Error: ");
 			childs_exit(shell, i, fd, 127);
-			ft_strfree(shell->env);
 		}
 	}
 	return (1);
