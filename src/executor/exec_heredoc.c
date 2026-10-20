@@ -109,17 +109,20 @@ int	exec_heredoc(t_cmd *cmd, int nb_cmd, int pid)
 	t_cmd	*current;
 	t_redir	*node;
 	int		i;
+	int		j;
 
 	current = cmd;
 	i = 0;
+	j = 0;
 	while (i < nb_cmd)
 	{
 		node = current->redirections;
 		while (node != NULL)
 		{
-			if (!is_heredoc(node, i, pid))
+			if (!is_heredoc(node, j, pid))
 				return (0);
 			node = node->next;
+			j++;
 		}
 		current = current->next;
 		i++;
