@@ -23,7 +23,7 @@ void	sigquit_handler(int signal, t_shell *shell)
 	rl_redisplay();
 }*/
 
-void	sigint_handler(int signal)
+void	sigint_handler(int signal) // CTRL+C
 {
 	g_signal = signal;
 	write(1, "\n", 1);
