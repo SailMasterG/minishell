@@ -41,18 +41,19 @@ void	show_prompt(t_shell *shell)
 	while (1)
 	{
 		set_signal_mode(INTERACTIVE);
+		g_signal = 0;
 		line = readline("Minishell: ");
 		if (g_signal == SIGINT)
-			shell->exit_status = SIGINT;
+			shell->exit_status = SIGINT + 128;
 		if (!line)
 		{
 			write(1, "exit\n", 5);
 			break ;
 		}
-		if(line[0] == '\0')
+		if (line[0] == '\0')
 		{
 			free(line);
-			continue;
+			continue ;
 		}
 		else if (line[0])
 		{
@@ -65,7 +66,7 @@ void	show_prompt(t_shell *shell)
 				free(line);
 				continue ;
 			}
-			executor(shell);
+			if (executor(shell))
 			free(line);
 		}
 	}

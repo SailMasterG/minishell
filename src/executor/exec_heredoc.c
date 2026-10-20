@@ -12,9 +12,9 @@
 
 #include "../../inc/include.h"
 
-static int		heredoc_event_hook(void)
+static int	heredoc_event_hook(void)
 {
-	if(g_signal == SIGINT)
+	if (g_signal == SIGINT)
 		rl_done = 1;
 	return (0);
 }
