@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/19 20:36:59 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/19 23:06:32 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/21 00:53:00 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,33 +29,11 @@ void childs_exit(t_shell *shell, int i, int *fd, int code)
 	exit(code);
 }
 
-int	wait_pid(pid_t *pid, int nb_cmd)
-{
-	int		status;
-	int		i;
-	int		code;
-	pid_t	caugth_pid;
-	pid_t	last_pid;
+ca
 
-	last_pid = pid[nb_cmd - 1];
-	i = 0;
-	code = 0;
-	while (i < nb_cmd)
-	{
-		caugth_pid = waitpid(pid[i], &status, 0);
-		if (caugth_pid == last_pid)
-		{
-			if (WIFSIGNALED(status))
-				code = WTERMSIG(status) + 128;
-			else if (WIFEXITED(status))
-				code = WEXITSTATUS(status);
-		}
-		i++;
-	}
-	return (code);
-}
 static void run_child(t_shell *shell, int i, int *fd, t_cmd *current)
 {
+		set_signal_mode(FORKED);
 		setup_child_pipes(shell, i, fd);
 		redirs_cmd(current->redirections);
 		if (current->path == NULL)
@@ -78,7 +56,6 @@ int fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
 		perror("fork");
 		return (0);
 	}
-	set_signal_mode(FORKED);
 	if (shell->pids[i] == 0)
 		run_child(shell, i, fd, current);
 	return (1);
