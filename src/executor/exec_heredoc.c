@@ -36,13 +36,18 @@ static int	heredoc_readline(int fd, char *line, t_redir *node)
 		}
 		if (ft_strncmp(line, node->file, ft_strlen(node->file) + 1) == 0)
 			break ;
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
+		if(fd != -1)
+		{			
+			write(fd, line, ft_strlen(line));
+			write(fd, "\n", 1);
+		}
 		free(line);
 	}
 	rl_event_hook = NULL;
 	rl_done = 0;
 	free(line);
+	if(fd == -1)
+		return (0);
 	return (1);
 }
 
@@ -80,9 +85,6 @@ static int	is_heredoc(t_redir *node, int i, int pid)
 		if (fd < 0)
 		{
 			perror("Error de Lectura de archivo 1");
-			unlink(route_path_tmp);
-			free(route_path_tmp);
-			return (0);
 		}
 		if(!heredoc_readline(fd, line, node))
 		{
