@@ -42,6 +42,8 @@ void	show_prompt(t_shell *shell)
 	{
 		set_signal_mode(INTERACTIVE);
 		line = readline("Minishell: ");
+		if (g_signal == SIGINT)
+			shell->exit_status = SIGINT;
 		if (!line)
 		{
 			write(1, "exit\n", 5);
