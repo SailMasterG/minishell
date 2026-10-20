@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/19 20:36:59 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/21 00:53:00 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/21 00:57:01 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ void childs_exit(t_shell *shell, int i, int *fd, int code)
 	free_cmds(shell->cmds);
 	exit(code);
 }
-
-ca
 
 static void run_child(t_shell *shell, int i, int *fd, t_cmd *current)
 {
