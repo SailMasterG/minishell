@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 14:18:12 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/19 13:24:41 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/20 00:01:29 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef INCLUDE_H
+
+# ifndef INCLUDE_H
 # define INCLUDE_H
 # include <stdio.h>
 # include <readline/readline.h>
