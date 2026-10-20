@@ -29,5 +29,6 @@
 # include "parse.h"
 # include "exec.h"
 
+extern volatile sig_atomic_t	g_signal;
 void	set_signal_mode(t_signal_modes mode);
 #endif

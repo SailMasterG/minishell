@@ -13,20 +13,22 @@
 #include "../inc/include.h"
 #include <signal.h>
 
-void	sigquit_handler(int signal, t_shell *shell)
+volatile sig_atomic_t g_signal;
+
+void	sigquit_handler(int signal) //CTRL+D
 {
 	rl_on_new_line();
 	rl_replace_line("", 0);
-	shell->exit_status = signal;
+	(void)signal;
 	rl_redisplay();
 }
 
-void	sigint_handler(int signal)
+void	sigint_handler(int signal) // CTRL+C
 {
-	(void)signal;
-	ft_putstr_fd("\n", 1); // we can use write? because this funcition use
-	rl_on_new_line();         // 2. Tell to Readline: "we are in newline"
-	rl_replace_line("", 0);   // 3. Empty the text that user was write
+	g_signal = signal;
+	ft_putstr_fd("\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
 	rl_redisplay();
 }
 
