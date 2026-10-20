@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/19 20:36:59 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/21 00:57:01 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/21 00:58:26 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,36 @@ void childs_exit(t_shell *shell, int i, int *fd, int code)
 	ft_strfree(shell->env);
 	free_cmds(shell->cmds);
 	exit(code);
+}
+
+int	wait_pid(pid_t *pid, int nb_cmd)
+{
+	int		status;
+	int		i;
+	int		code;
+	pid_t	caugth_pid;
+	pid_t	last_pid;
+
+	last_pid = pid[nb_cmd - 1];
+	i = 0;
+	code = 0;
+	while (i < nb_cmd)
+	{
+		caugth_pid = waitpid(pid[i], &status, 0);
+		if (caugth_pid == last_pid)
+		{
+			if (WIFSIGNALED(status))
+			{
+				if(WTERMSIG(status) ==SIGINT)
+					write(1,"\n",1);	
+				code = WTERMSIG(status) + 128;
+			}
+			else if (WIFEXITED(status))
+				code = WEXITSTATUS(status);
+		}
+		i++;
+	}
+	return (code);
 }
 
 static void run_child(t_shell *shell, int i, int *fd, t_cmd *current)
