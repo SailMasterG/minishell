@@ -54,6 +54,7 @@ void	show_prompt(t_shell *shell)
 		}
 		else if (line[0])
 		{
+			add_history(line);
 			if (shell->cmds)
 				free_cmds(shell->cmds);
 			shell->cmds = parse(line, shell);
