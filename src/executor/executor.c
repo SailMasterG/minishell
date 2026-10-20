@@ -34,7 +34,6 @@ int exec_loop(t_shell *shell, int *fd, t_cmd *current)
 		}
 		i++;
 	}
-	set_signal_mode(EXECUTION);
 	return (1);
 }
 
@@ -60,14 +59,18 @@ int	executor(t_shell *shell)
 	shell->cmd_count = count_cmd(shell->cmds);
 	shell->prevfd = -1;
 	current = shell->cmds;
-	set_signal_mode(EXECUTION);
 	if(!malloc_pids(shell))
 		return(1);
+	set_signal_mode(HEREDOC);
 	if (!exec_heredoc(shell->cmds, shell->cmd_count, getpid()))
 	{
 		free(shell->pids);
+		shell->pids = NULL;
+		shell->exit_status = 130;
+		g_signal = 0;
 		return (1);
 	}
+	set_signal_mode(EXECUTION);
 	if (!exec_loop(shell, fd, current))
 	{
 		free(shell->pids);

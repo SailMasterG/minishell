@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enum.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 14:16:30 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/16 14:16:31 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/19 23:24:03 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef enum e_signal_modes
 	INTERACTIVE,
 	EXECUTION,
 	FORKED,
+	HEREDOC,
 }				t_signal_modes;
 
 #endif // !ENUM_H

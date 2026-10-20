@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/19 20:36:59 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/19 21:31:54 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/19 23:06:32 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	wait_pid(pid_t *pid, int nb_cmd)
 }
 static void run_child(t_shell *shell, int i, int *fd, t_cmd *current)
 {
-		set_signal_mode(FORKED);
 		setup_child_pipes(shell, i, fd);
 		redirs_cmd(current->redirections);
 		if (current->path == NULL)
@@ -79,6 +78,7 @@ int fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
 		perror("fork");
 		return (0);
 	}
+	set_signal_mode(FORKED);
 	if (shell->pids[i] == 0)
 		run_child(shell, i, fd, current);
 	return (1);

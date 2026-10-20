@@ -12,20 +12,38 @@
 
 #include "../../inc/include.h"
 
-static void	heredoc_readline(int fd, char *line, t_redir *node)
+static int		heredoc_event_hook(void)
+{
+	if(g_signal == SIGINT)
+		rl_done = 1;
+	return (0);
+}
+
+static int	heredoc_readline(int fd, char *line, t_redir *node)
 {
 	while (1)
 	{
+		rl_event_hook = heredoc_event_hook;
 		line = readline("heredoc>");
 		if (line == NULL)
 			break ;
+		if(g_signal == SIGINT)
+		{
+			rl_event_hook = NULL;
+			rl_done = 0; // <-- CRUCIAL: Limpiar el flag para el prompt principal
+			free(line);
+			return (0);
+		}
 		if (ft_strncmp(line, node->file, ft_strlen(node->file) + 1) == 0)
 			break ;
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);
 	}
+	rl_event_hook = NULL;
+	rl_done = 0;
 	free(line);
+	return (1);
 }
 
 static char	*heredoc_path_temp(int i, int pid)
@@ -65,7 +83,16 @@ static int	is_heredoc(t_redir *node, int i, int pid)
 			free(route_path_tmp);
 			return (0);
 		}
-		heredoc_readline(fd, line, node);
+		if(!heredoc_readline(fd, line, node))
+		{
+			close(fd);
+			unlink(node->file);
+			free(node->file);
+			unlink(route_path_tmp);
+			free(route_path_tmp);
+			node->file = NULL;
+			return (0);
+		}
 		close(fd);
 		free(node->file);
 		node->file = route_path_tmp;
