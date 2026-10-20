@@ -86,6 +86,7 @@ static int	is_heredoc(t_redir *node, int i, int pid)
 		if(!heredoc_readline(fd, line, node))
 		{
 			close(fd);
+			unlink(node->file);
 			free(node->file);
 			unlink(route_path_tmp);
 			free(route_path_tmp);
