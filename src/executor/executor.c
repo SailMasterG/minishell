@@ -65,6 +65,9 @@ int	executor(t_shell *shell)
 	if (!exec_heredoc(shell->cmds, shell->cmd_count, getpid()))
 	{
 		free(shell->pids);
+		shell->pids = NULL;
+		shell->exit_status = 130;
+		g_signal = 0;
 		return (1);
 	}
 	set_signal_mode(EXECUTION);

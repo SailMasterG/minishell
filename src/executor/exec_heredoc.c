@@ -12,16 +12,25 @@
 
 #include "../../inc/include.h"
 
+static int		heredoc_event_hook(void)
+{
+	if(g_signal == SIGINT)
+		rl_done = 1;
+	return (0);
+}
+
 static int	heredoc_readline(int fd, char *line, t_redir *node)
 {
 	while (1)
 	{
-		g_signal = 0;
+		rl_event_hook = heredoc_event_hook;
 		line = readline("heredoc>");
 		if (line == NULL)
 			break ;
-		if(g_signal == 2)
+		if(g_signal == SIGINT)
 		{
+			rl_event_hook = NULL;
+			rl_done = 0; // <-- CRUCIAL: Limpiar el flag para el prompt principal
 			free(line);
 			return (0);
 		}
@@ -31,6 +40,8 @@ static int	heredoc_readline(int fd, char *line, t_redir *node)
 		write(fd, "\n", 1);
 		free(line);
 	}
+	rl_event_hook = NULL;
+	rl_done = 0;
 	free(line);
 	return (1);
 }
@@ -97,7 +108,6 @@ int	exec_heredoc(t_cmd *cmd, int nb_cmd, int pid)
 
 	current = cmd;
 	i = 0;
-	set_signal_mode(HEREDOC);
 	while (i < nb_cmd)
 	{
 		node = current->redirections;
