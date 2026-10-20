@@ -30,7 +30,7 @@ static int	heredoc_readline(int fd, char *line, t_redir *node)
 		if(g_signal == SIGINT)
 		{
 			rl_event_hook = NULL;
-			rl_done = 0; // <-- CRUCIAL: Limpiar el flag para el prompt principal
+			rl_done = 0;
 			free(line);
 			return (0);
 		}

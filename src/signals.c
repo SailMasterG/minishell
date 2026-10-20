@@ -3,25 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/19 12:47:32 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/20 02:33:49 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/20 22:26:44 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#define _POSIX_C_SOURCE 200809L
 
 #include "../inc/include.h"
 #include <signal.h>
 
 volatile sig_atomic_t	g_signal = 0;
-/*
-void	sigquit_handler(int signal, t_shell *shell)
-{
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	shell->exit_status = signal + 128;
-	rl_redisplay();
-}*/
 
 void	sigint_handler(int signal) // CTRL+C
 {
@@ -38,6 +32,21 @@ void	sigint_heredoc(int signal)
 	rl_done = 1;
 }
 
+static void set_mode_interactive(struct sigaction *sa)
+{
+	sa->sa_handler = sigint_handler;
+	sigaction(SIGINT, sa, NULL);
+	sa->sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, sa, NULL);
+}
+static void set_mode_heredoc(struct sigaction *sa)
+{
+	sa->sa_handler = sigint_heredoc;
+	sa->sa_flags = 0;
+	sigaction(SIGINT, sa, NULL);
+	sa->sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, sa, NULL);
+}
 void	set_signal_mode(t_signal_modes mode)
 {
 	struct sigaction	sa;
@@ -47,10 +56,7 @@ void	set_signal_mode(t_signal_modes mode)
 	sa.sa_flags = SA_RESTART;
 	if (mode == INTERACTIVE)
 	{
-		sa.sa_handler = sigint_handler;
-		sigaction(SIGINT, &sa, NULL);
-		sa.sa_handler = SIG_IGN;
-		sigaction(SIGQUIT, &sa, NULL);
+		set_mode_interactive(&sa);
 	}
 	else if (mode == EXECUTION)
 	{
@@ -66,10 +72,6 @@ void	set_signal_mode(t_signal_modes mode)
 	}
 	else if (mode == HEREDOC)
 	{
-		sa.sa_handler = sigint_heredoc;
-		sa.sa_flags = 0;
-		sigaction(SIGINT, &sa, NULL);
-		sa.sa_handler = SIG_IGN;
-		sigaction(SIGQUIT, &sa, NULL);
+		set_mode_heredoc(&sa);
 	}
 }

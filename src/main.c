@@ -67,7 +67,7 @@ void	show_prompt(t_shell *shell)
 				continue ;
 			}
 			if (executor(shell))
-			free(line);
+				free(line);
 		}
 	}
 	free(line);
