@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/19 12:47:32 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/20 02:27:38 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/20 02:33:49 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	set_signal_mode(t_signal_modes mode)
 
 	rl_done = 0;
 	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
+	sa.sa_flags = SA_RESTART;
 	if (mode == INTERACTIVE)
 	{
 		sa.sa_handler = sigint_handler;
