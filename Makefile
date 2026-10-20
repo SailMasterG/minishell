@@ -6,7 +6,7 @@ INCDIR = inc
 LIBFT_DIR = $(INCDIR)/libft
 LIBFT = $(LIBFT_DIR)/libft.a
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I$(INCDIR) -I$(LIBFT_DIR) -Wshadow -Wstrict-prototypes -Wpointer-arith 
+CFLAGS = -Wall -Wextra -Werror -I$(INCDIR) -I$(LIBFT_DIR) -Wshadow -Wstrict-prototypes -Wpointer-arith
 VAL_FLAGS  = -g3 -O0
 ASAN_FLAGS = -fsanitize=address,undefined -fno-omit-frame-pointer
 SRC = main.c \
@@ -25,7 +25,9 @@ SRC = main.c \
 	  executor/exec_utils.c \
 	  executor/exec_redir.c \
 	  executor/exec_heredoc.c \
-	  executor/exec_path.c
+	  executor/exec_path.c \
+	  executor/process.c \
+	  executor/pipes.c
 
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 
