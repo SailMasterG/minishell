@@ -80,6 +80,7 @@ static int	is_heredoc(t_redir *node, int i, int pid)
 		if (fd < 0)
 		{
 			perror("Error de Lectura de archivo 1");
+			unlink(route_path_tmp);
 			free(route_path_tmp);
 			return (0);
 		}
