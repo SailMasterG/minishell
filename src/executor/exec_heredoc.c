@@ -89,9 +89,6 @@ static int	is_heredoc(t_redir *node, int i, int pid)
 		if(!heredoc_readline(fd, line, node))
 		{
 			close(fd);
-			unlink(node->file);
-			free(node->file);
-			node->file = NULL;
 			unlink(route_path_tmp);
 			free(route_path_tmp);
 			return (0);
@@ -121,7 +118,7 @@ int	exec_heredoc(t_cmd *cmd, int nb_cmd, int pid)
 		{
 			if (!is_heredoc(node, j, pid))
 			{
-				erase_before_files(current, node);
+				erase_before_files(cmd, node);
 				return (0);
 			}
 			node = node->next;
