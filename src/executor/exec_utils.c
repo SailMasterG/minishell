@@ -41,13 +41,12 @@ void erase_before_files(t_cmd *cmd, t_redir *limit)
 		while(node != NULL)
 		{
 			if (limit == node)
-				return;			
+				return ;
 			if (node->type == REDIR_HEREDOC)
 			{
 				unlink(node->file);
 				free(node->file);
 				node->file = NULL;
-				continue;
 			}
 			node = node->next;
 		}

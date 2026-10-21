@@ -37,7 +37,7 @@ static int	heredoc_readline(int fd, char *line, t_redir *node)
 		if (ft_strncmp(line, node->file, ft_strlen(node->file) + 1) == 0)
 			break ;
 		if(fd != -1)
-		{			
+		{
 			write(fd, line, ft_strlen(line));
 			write(fd, "\n", 1);
 		}
@@ -92,7 +92,6 @@ static int	is_heredoc(t_redir *node, int i, int pid)
 			unlink(node->file);
 			free(node->file);
 			node->file = NULL;
-		//	clean_files_heredoc(node);
 			unlink(route_path_tmp);
 			free(route_path_tmp);
 			return (0);
