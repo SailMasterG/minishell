@@ -47,17 +47,15 @@ static int malloc_pids(t_shell *shell)
 	}
 	return (1);
 }
-void	clean_files_heredoc(t_cmd *cmd, int nb_cmd)
+void	clean_files_heredoc(t_cmd *cmd)
 {
 	t_redir *node;
 	t_cmd *current;
-	int i; 
 
 	current = cmd;
 	if	(!current)
 		return;
-	i = 0;
-	while(i < nb_cmd)
+	while(current != NULL)
 	{
 		node = current->redirections;
 		while(node != NULL)
@@ -67,13 +65,12 @@ void	clean_files_heredoc(t_cmd *cmd, int nb_cmd)
 				unlink(node->file);
 				free(node->file);
 				node->file = NULL;
-				node = node->next;
+				continue;
 			}
-			current = current->next;
-	 	}
-	i++;
+			node = node->next;
+		}
+		current = current->next;
 	}
-	free(current);
 	return;
 }
 
@@ -99,8 +96,7 @@ int	executor(t_shell *shell)
 		if (g_signal == SIGINT)
 		{
 			shell->exit_status = 130;
-			write(1,"S\n",2);
-			clean_files_heredoc(shell->cmds, shell->cmd_count);
+			clean_files_heredoc(shell->cmds);
 		}
 		g_signal = 0;
 		return (1);
