@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/19 20:36:59 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/21 00:58:26 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/21 07:55:26 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,9 @@ int	wait_pid(pid_t *pid, int nb_cmd)
 			if (WIFSIGNALED(status))
 			{
 				if(WTERMSIG(status) ==SIGINT)
+				{
 					write(1,"\n",1);	
+				}
 				code = WTERMSIG(status) + 128;
 			}
 			else if (WIFEXITED(status))

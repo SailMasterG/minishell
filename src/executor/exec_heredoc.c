@@ -91,9 +91,10 @@ static int	is_heredoc(t_redir *node, int i, int pid)
 			close(fd);
 			unlink(node->file);
 			free(node->file);
+			node->file = NULL;
+		//	clean_files_heredoc(node);
 			unlink(route_path_tmp);
 			free(route_path_tmp);
-			node->file = NULL;
 			return (0);
 		}
 		close(fd);
