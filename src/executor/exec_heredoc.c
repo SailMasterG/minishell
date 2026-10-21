@@ -121,7 +121,10 @@ int	exec_heredoc(t_cmd *cmd, int nb_cmd, int pid)
 		while (node != NULL)
 		{
 			if (!is_heredoc(node, j, pid))
+			{
+				erase_before_files(current, node);
 				return (0);
+			}
 			node = node->next;
 			j++;
 		}
