@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 14:18:12 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/20 00:01:29 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/22 14:52:03 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include "enum.h"
 # include "parse.h"
 # include "exec.h"
+# include "builtins.h"
 
 extern volatile sig_atomic_t	g_signal;
 void	set_signal_mode(t_signal_modes mode);
