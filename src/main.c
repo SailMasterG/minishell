@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
+/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+		  */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 14:06:14 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/19 13:28:31 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/22 16:19:18 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,19 @@ char	**enver(char **envp)
 	return (env);
 }
 
+int	entry_exec(char *line, t_shell *shell)
+{
+	add_history(line);
+	if (shell->cmds)
+		free_cmds(shell->cmds);
+	shell->cmds = parse(line, shell);
+	if (!shell->cmds)
+		return (free(line), 1);
+	if (executor(shell))
+		free(line);
+	return (0);
+}
+
 void	show_prompt(t_shell *shell)
 {
 	char	*line;
@@ -55,20 +68,8 @@ void	show_prompt(t_shell *shell)
 			free(line);
 			continue ;
 		}
-		else if (line[0])
-		{
-			add_history(line);
-			if (shell->cmds)
-				free_cmds(shell->cmds);
-			shell->cmds = parse(line, shell);
-			if (!shell->cmds)
-			{
-				free(line);
-				continue ;
-			}
-			if (executor(shell))
-				free(line);
-		}
+		else if (line[0] && entry_exec(line, shell) == 1)
+			continue ;
 	}
 	free(line);
 }

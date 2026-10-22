@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
+/*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/16 22:35:03 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/16 22:37:15 by chguerre         ###   ########.ch       */
+/*   Created: 2026/10/22 16:13:08 by rpinheir          #+#    #+#             */
+/*   Updated: 2026/10/22 16:13:11 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-int exec_loop(t_shell *shell, int *fd, t_cmd *current)
+int	exec_loop(t_shell *shell, int *fd, t_cmd *current)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < shell->cmd_count)
 	{
 		if (!pipe_creator(shell, i, fd, shell->pids))
 			return (0);
-		if(!fork_setup(shell, i, fd, current))
+		if (!fork_setup(shell, i, fd, current))
 			return (0);
 		if (current->next != NULL)
 			current = current->next;
@@ -37,7 +37,7 @@ int exec_loop(t_shell *shell, int *fd, t_cmd *current)
 	return (1);
 }
 
-static int malloc_pids(t_shell *shell)
+static int	malloc_pids(t_shell *shell)
 {
 	shell->pids = malloc(sizeof(pid_t) * shell->cmd_count);
 	if (shell->pids == NULL)
@@ -59,29 +59,20 @@ int	executor(t_shell *shell)
 	shell->cmd_count = count_cmd(shell->cmds);
 	shell->prevfd = -1;
 	current = shell->cmds;
-	if(!malloc_pids(shell))
-		return(1);
+	if (!malloc_pids(shell))
+		return (1);
 	set_signal_mode(HEREDOC);
 	if (!exec_heredoc(shell->cmds, shell->cmd_count, getpid()))
 	{
-		free(shell->pids);
-		shell->pids = NULL;
-		shell->exit_status = 1;
+		(free(shell->pids), shell->pids = NULL, shell->exit_status = 1);
 		if (g_signal == SIGINT)
-		{
 			shell->exit_status = 130;
-		}
 		g_signal = 0;
 		return (1);
 	}
 	set_signal_mode(EXECUTION);
 	if (!exec_loop(shell, fd, current))
-	{
-		free(shell->pids);
-		return (1);
-	}
+		return (free(shell->pids), 1);
 	code = wait_pid(shell->pids, shell->cmd_count);
-	free(shell->pids);
-	shell->exit_status = code;
-	return (code);
+	return (free(shell->pids), shell->exit_status = code, code);
 }

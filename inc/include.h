@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef INCLUDE_H
+#ifndef INCLUDE_H
 # define INCLUDE_H
 # include <stdio.h>
 # include <readline/readline.h>
