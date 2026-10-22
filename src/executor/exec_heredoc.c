@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
+/*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/16 22:32:59 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/16 22:32:59 by chguerre         ###   ########.ch       */
+/*   Created: 2026/10/22 16:06:43 by rpinheir          #+#    #+#             */
+/*   Updated: 2026/10/22 16:06:52 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	heredoc_readline(int fd, char *line, t_redir *node)
 		line = readline("heredoc>");
 		if (line == NULL)
 			break ;
-		if(g_signal == SIGINT)
+		if (g_signal == SIGINT)
 		{
 			rl_event_hook = NULL;
 			rl_done = 0;
@@ -36,17 +36,14 @@ static int	heredoc_readline(int fd, char *line, t_redir *node)
 		}
 		if (ft_strncmp(line, node->file, ft_strlen(node->file) + 1) == 0)
 			break ;
-		if(fd != -1)
-		{
-			write(fd, line, ft_strlen(line));
-			write(fd, "\n", 1);
-		}
+		if (fd != -1)
+			ft_putendl_fd(line, fd);
 		free(line);
 	}
 	rl_event_hook = NULL;
 	rl_done = 0;
 	free(line);
-	if(fd == -1)
+	if (fd == -1)
 		return (0);
 	return (1);
 }
@@ -86,12 +83,11 @@ static int	is_heredoc(t_redir *node, int i, int pid)
 		{
 			perror("Error de Lectura de archivo 1");
 		}
-		if(!heredoc_readline(fd, line, node))
+		if (!heredoc_readline(fd, line, node))
 		{
 			close(fd);
 			unlink(route_path_tmp);
-			free(route_path_tmp);
-			return (0);
+			return (free(route_path_tmp), 0);
 		}
 		close(fd);
 		free(node->file);

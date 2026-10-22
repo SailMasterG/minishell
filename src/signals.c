@@ -32,14 +32,15 @@ void	sigint_heredoc(int signal)
 	rl_done = 1;
 }
 
-static void set_mode_interactive(struct sigaction *sa)
+static void	set_mode_interactive(struct sigaction *sa)
 {
 	sa->sa_handler = sigint_handler;
 	sigaction(SIGINT, sa, NULL);
 	sa->sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, sa, NULL);
 }
-static void set_mode_heredoc(struct sigaction *sa)
+
+static void	set_mode_heredoc(struct sigaction *sa)
 {
 	sa->sa_handler = sigint_heredoc;
 	sa->sa_flags = 0;
@@ -47,6 +48,7 @@ static void set_mode_heredoc(struct sigaction *sa)
 	sa->sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, sa, NULL);
 }
+
 void	set_signal_mode(t_signal_modes mode)
 {
 	struct sigaction	sa;

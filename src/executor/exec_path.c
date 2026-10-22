@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
+/*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/16 21:17:06 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/16 21:20:21 by chguerre         ###   ########.ch       */
+/*   Created: 2026/10/22 16:07:02 by rpinheir          #+#    #+#             */
+/*   Updated: 2026/10/22 16:07:21 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-static void free_paths(char **paths)
+static void	free_paths(char **paths)
 {
 	int	i;
 
@@ -82,11 +82,11 @@ void	resolve_all_paths(t_cmd *cmd, char **envp)
 	current = cmd;
 	while (current != NULL)
 	{
-		if(current->cmd_args[0] == NULL)
+		if (current->cmd_args[0] == NULL)
 		{
 			current->path = NULL;
 			current = current->next;
-			continue;
+			continue ;
 		}
 		if (current->cmd_args[0][0] == '/'
 			|| ft_strchr(current->cmd_args[0], '/'))

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   build_cmds.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
+/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+       */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 21:02:10 by chguerre          #+#    #+#             */
 /*   Updated: 2026/10/16 21:06:35 by chguerre         ###   ########.ch       */

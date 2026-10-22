@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+        */
+/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+       */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 22:01:37 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/16 22:01:37 by chguerre         ###   ########.ch       */
+/*   Updated: 2026/10/22 16:08:09 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,18 @@ int	count_cmd(t_cmd *cmd)
 	return (count);
 }
 
-void erase_before_files(t_cmd *cmd, t_redir *limit)
+void	erase_before_files(t_cmd *cmd, t_redir *limit)
 {
-	t_redir *node;
-	t_cmd *current;
+	t_redir	*node;
+	t_cmd	*current;
 
 	current = cmd;
-	if	(!current)
-		return;
-	while(current != NULL)
+	if (!current)
+		return ;
+	while (current != NULL)
 	{
 		node = current->redirections;
-		while(node != NULL)
+		while (node != NULL)
 		{
 			if (limit == node)
 				return ;
@@ -52,5 +52,5 @@ void erase_before_files(t_cmd *cmd, t_redir *limit)
 		}
 		current = current->next;
 	}
-	return;
+	return ;
 }
