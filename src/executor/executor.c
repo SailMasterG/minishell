@@ -48,6 +48,20 @@ static int	malloc_pids(t_shell *shell)
 	return (1);
 }
 
+static int	run_heredoc(t_shell *shell )
+{
+	set_signal_mode(HEREDOC);
+	if (!exec_heredoc(shell->cmds, shell->cmd_count, getpid()))
+		return (1);
+	free(shell->pids);
+	shell->pids = NULL;
+	shell->exit_status = 1;
+	if (g_signal == SIGINT)
+		shell->exit_status = 130;
+	g_signal = 0;
+	return (0);
+}
+
 int	executor(t_shell *shell)
 {
 	int			fd[2];
@@ -62,22 +76,15 @@ int	executor(t_shell *shell)
 	current = shell->cmds;
 	if (!malloc_pids(shell))
 		return (1);
-	set_signal_mode(HEREDOC);
-	if (!exec_heredoc(shell->cmds, shell->cmd_count, getpid()))
-	{
-		(free(shell->pids), shell->pids = NULL, shell->exit_status = 1);
-		if (g_signal == SIGINT)
-			shell->exit_status = 130;
-		g_signal = 0;
+	if (!run_heredoc(shell))
 		return (1);
-	}
 	set_signal_mode(EXECUTION);
 	builtin = get_builtin(current->cmd_args[0]);
-	if (builtin != NULL && shell->cmd_count == 1 && is_parent_builtin(current->cmd_args[0]))
-		{
-			code = run_builtin_parent(shell, builtin, shell->cmds);
-			return (free(shell->pids), shell->pids = NULL, code);
-		}
+	if (builtin != NULL && shell->cmd_count == 1)
+	{
+		code = run_builtin_parent(shell, builtin, shell->cmds);
+		return (free(shell->pids), shell->pids = NULL, code);
+	}
 	if (!exec_loop(shell, fd, current))
 		return (free(shell->pids), 1);
 	code = wait_pid(shell->pids, shell->cmd_count);

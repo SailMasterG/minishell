@@ -22,7 +22,7 @@ static int	redir_in(t_redir *node)
 		perror(node->file);
 		return (-1);
 	}
-	if( dup2(fd_redir, STDIN_FILENO) == -1)
+	if (dup2(fd_redir, STDIN_FILENO) == -1)
 	{
 		close(fd_redir);
 		return (-1);
@@ -41,7 +41,7 @@ static int	redir_out(t_redir *node )
 		perror(node->file);
 		return (-1);
 	}
-	if(dup2(fd_redir, STDOUT_FILENO) == -1)
+	if (dup2(fd_redir, STDOUT_FILENO) == -1)
 	{
 		close(fd_redir);
 		return (-1);
@@ -58,9 +58,9 @@ static int	redir_append(t_redir *node)
 	if (fd_redir < 0)
 	{
 		perror(node->file);
-		return(-1);
+		return (-1);
 	}
-	if(dup2(fd_redir, STDOUT_FILENO) == -1)
+	if (dup2(fd_redir, STDOUT_FILENO) == -1)
 	{
 		close(fd_redir);
 		return (-1);
@@ -77,11 +77,11 @@ static int	redir_heredoc(t_redir *node)
 	if (fd_redir < 0)
 	{
 		perror("Error de lectura de archivo 2");
-		return(-1);
+		return (-1);
 	}
 	unlink(node->file);
 	free(node->file);
-	if(dup2(fd_redir, STDIN_FILENO) == -1)
+	if (dup2(fd_redir, STDIN_FILENO) == -1)
 	{
 		close(fd_redir);
 		return (-1);
@@ -97,9 +97,9 @@ int	redirs_cmd(t_redir *node)
 		if (node->type == REDIR_IN && redir_in(node) == -1)
 			return (1);
 		else if (node->type == REDIR_OUT && redir_out(node) == -1)
-				return (1);
+			return (1);
 		else if (node->type == REDIR_APPEND && redir_append(node) == -1)
-				return (1);
+			return (1);
 		else if (node->type == REDIR_HEREDOC && redir_heredoc(node) == -1)
 			return (1);
 		node = node->next;

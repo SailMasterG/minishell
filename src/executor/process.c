@@ -86,7 +86,7 @@ int	fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
 		perror("fork");
 		return (0);
 	}
-	if (shell->pids[i] == 0 )
+	if (shell->pids[i] == 0)
 		run_child(shell, i, fd, current);
 	return (1);
 }

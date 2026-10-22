@@ -28,5 +28,4 @@ int			builtin_exit(t_shell *shell, char **cmd_args);
 int			is_parent_builtin(char *cmd);
 int			run_builtin_parent(t_shell *shell, t_builtin fn, t_cmd *cmd);
 
-
 #endif // H_BUILTINS
