@@ -6,12 +6,21 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 14:32:50 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/22 15:11:43 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/22 15:17:04 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	while (*s1 && *s1 == *s2)
+	{
+		s1++;
+		s2++;
+	}
+	return ((unsigned char)*s1 - (unsigned char)*s2);
+}
 t_builtin	get_builtin(char *name)
 {
 	if (name == NULL)
