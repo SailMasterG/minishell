@@ -28,6 +28,8 @@ SRC = main.c \
 	  executor/exec_path.c \
 	  executor/process.c \
 	  executor/pipes.c
+	  builtin/builtin.c \
+	  builtin/builtin_pwd.c
 
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 
