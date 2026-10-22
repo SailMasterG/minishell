@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 14:32:50 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/22 18:54:50 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/22 21:15:57 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,29 +21,55 @@ static int	ft_strcmp(const char *s1, const char *s2)
 	}
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
+int is_parent_builtin(char *cmd)
+{
+	if (ft_strcmp(cmd, "cd") == 0)
+		return (1);
+	if (ft_strcmp(cmd, "export") == 0)
+		return (1);
+	if (ft_strcmp(cmd, "unset") == 0)
+		return (1);
+	if (ft_strcmp(cmd, "exit") == 0)
+		return (1);
+	return (0);
+}
 
+int	run_builtin_parent(t_shell *shell, t_builtin builtin, t_cmd *cmd)
+{
+	int	saved_out;
+	int	code;
+
+	saved_out = dup(STDOUT_FILENO);
+	if (saved_out == -1)
+		return (1);
+	if (redirs_cmd(cmd->redirections) != 0)
+	{
+		dup2(saved_out, STDOUT_FILENO);        /* restaurar */
+		close(saved_out);
+		return (1);
+	}
+	code = builtin(shell, cmd->cmd_args);
+	dup2(saved_out, STDOUT_FILENO);        /* restaurar */
+	close(saved_out);
+	return (code);
+}
 t_builtin	get_builtin(char *name)
 {
 	if (name == NULL)
 		return (NULL);
 	if (ft_strcmp(name, "echo") == 0)
-		return (1);
-	//	return (builtin_echo);
+		return (builtin_echo);
 	if (ft_strcmp(name, "cd") == 0)
-		return (1);
+		return (builtin_cd);
 	if (ft_strcmp(name, "pwd") == 0)
 		return (builtin_pwd);
 	if (ft_strcmp(name, "export") == 0)
-		return (1);
-	//	return (builtin_export);
+		return (builtin_export);
 	if (ft_strcmp(name, "unset") == 0)
-		return (1);
-	//	return (builtin_unset);
+		return (builtin_unset);
 	if (ft_strcmp(name, "env") == 0)
-		return (1);
-	//	return (builtin_env);
+		return (builtin_env);
 	if (ft_strcmp(name, "exit") == 0)
-		return (1);
-	//	return (builtin_exit);
+		return (builtin_exit);
 	return (NULL);
 }

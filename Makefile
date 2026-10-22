@@ -27,9 +27,15 @@ SRC = main.c \
 	  executor/exec_heredoc.c \
 	  executor/exec_path.c \
 	  executor/process.c \
-	  executor/pipes.c
-	  builtin/builtin.c \
-	  builtin/builtin_pwd.c
+	  executor/pipes.c \
+	  builtins/builtins.c \
+	  builtins/builtin_pwd.c \
+	  builtins/builtin_echo.c \
+	  builtins/builtin_exit.c \
+	  builtins/builtin_cd.c \
+	  builtins/builtin_env.c \
+	  builtins/builtin_export.c \
+	  builtins/builtin_unset.c \
 
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/19 20:36:59 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/22 16:15:32 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/22 21:08:47 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ static void	run_child(t_shell *shell, int i, int *fd, t_cmd *current)
 {
 	set_signal_mode(FORKED);
 	setup_child_pipes(shell, i, fd);
-	redirs_cmd(current->redirections);
+	if (redirs_cmd(current->redirections) != 0)
+		childs_exit(shell, i, fd, 1);
 	if (current->cmd_args[0] == NULL)
 		childs_exit(shell, i, fd, 0);
 	if (current->path == NULL)
@@ -85,7 +86,7 @@ int	fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
 		perror("fork");
 		return (0);
 	}
-	if (shell->pids[i] == 0)
+	if (shell->pids[i] == 0 )
 		run_child(shell, i, fd, current);
 	return (1);
 }

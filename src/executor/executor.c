@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 16:13:08 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/22 16:13:11 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/22 20:20:41 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,10 @@ static int	malloc_pids(t_shell *shell)
 
 int	executor(t_shell *shell)
 {
-	int		fd[2];
-	t_cmd	*current;
-	int		code;
+	int			fd[2];
+	t_cmd		*current;
+	int			code;
+	t_builtin	builtin;
 
 	code = 0;
 	resolve_all_paths(shell->cmds, shell->env);
@@ -71,6 +72,12 @@ int	executor(t_shell *shell)
 		return (1);
 	}
 	set_signal_mode(EXECUTION);
+	builtin = get_builtin(current->cmd_args[0]);
+	if (builtin != NULL && shell->cmd_count == 1 && is_parent_builtin(current->cmd_args[0]))
+		{
+			code = run_builtin_parent(shell, builtin, shell->cmds);
+			return (free(shell->pids), shell->pids = NULL, code);
+		}
 	if (!exec_loop(shell, fd, current))
 		return (free(shell->pids), 1);
 	code = wait_pid(shell->pids, shell->cmd_count);
