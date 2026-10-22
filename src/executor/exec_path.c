@@ -82,6 +82,12 @@ void	resolve_all_paths(t_cmd *cmd, char **envp)
 	current = cmd;
 	while (current != NULL)
 	{
+		if(current->cmd_args[0] == NULL)
+		{
+			current->path = NULL;
+			current = current->next;
+			continue;
+		}
 		if (current->cmd_args[0][0] == '/'
 			|| ft_strchr(current->cmd_args[0], '/'))
 			current->path = ft_strdup(current->cmd_args[0]);

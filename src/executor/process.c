@@ -66,14 +66,17 @@ static void run_child(t_shell *shell, int i, int *fd, t_cmd *current)
 		set_signal_mode(FORKED);
 		setup_child_pipes(shell, i, fd);
 		redirs_cmd(current->redirections);
+		if(current->cmd_args[0] == NULL)
+			childs_exit(shell, i, fd, 0);
 		if (current->path == NULL)
 		{
-			ft_printf("Error: command not found: %s\n", current->cmd_args[0]);
+			write(2,current->cmd_args[0], ft_strlen(current->cmd_args[0]));
+			ft_putendl_fd(": command not found",2);
 			childs_exit(shell, i, fd, 127);
 		}
 		if ((execve(current->path, current->cmd_args, shell->env)) == -1)
 		{
-			perror("Error: ");
+			perror(current->cmd_args[0]);
 			childs_exit(shell, i, fd, 127);
 		}
 }
