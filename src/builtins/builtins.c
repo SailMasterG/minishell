@@ -21,18 +21,6 @@ static int	ft_strcmp(const char *s1, const char *s2)
 	}
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
-int is_parent_builtin(char *cmd)
-{
-	if (ft_strcmp(cmd, "cd") == 0)
-		return (1);
-	if (ft_strcmp(cmd, "export") == 0)
-		return (1);
-	if (ft_strcmp(cmd, "unset") == 0)
-		return (1);
-	if (ft_strcmp(cmd, "exit") == 0)
-		return (1);
-	return (0);
-}
 
 int	run_builtin_parent(t_shell *shell, t_builtin builtin, t_cmd *cmd)
 {
@@ -44,15 +32,16 @@ int	run_builtin_parent(t_shell *shell, t_builtin builtin, t_cmd *cmd)
 		return (1);
 	if (redirs_cmd(cmd->redirections) != 0)
 	{
-		dup2(saved_out, STDOUT_FILENO);        /* restaurar */
+		dup2(saved_out, STDOUT_FILENO);
 		close(saved_out);
 		return (1);
 	}
 	code = builtin(shell, cmd->cmd_args);
-	dup2(saved_out, STDOUT_FILENO);        /* restaurar */
+	dup2(saved_out, STDOUT_FILENO);
 	close(saved_out);
 	return (code);
 }
+
 t_builtin	get_builtin(char *name)
 {
 	if (name == NULL)
