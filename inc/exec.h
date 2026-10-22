@@ -27,5 +27,5 @@ int		fork_setup(t_shell *shell, int i, int *fd, t_cmd *current);
 int		wait_pid(pid_t *pid, int nb_cmd);
 void	setup_child_pipes(t_shell *shell, int i, int *fd);
 int		pipe_creator(t_shell *shell, int i, int *fd, pid_t *pid);
-
+void    erase_before_files(t_cmd *cmd, t_redir *limit);
 #endif // !EXEC_H

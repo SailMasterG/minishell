@@ -66,7 +66,11 @@ int	executor(t_shell *shell)
 	{
 		free(shell->pids);
 		shell->pids = NULL;
-		shell->exit_status = 130;
+		shell->exit_status = 1;
+		if (g_signal == SIGINT)
+		{
+			shell->exit_status = 130;
+		}
 		g_signal = 0;
 		return (1);
 	}

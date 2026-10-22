@@ -30,19 +30,24 @@ static int	heredoc_readline(int fd, char *line, t_redir *node)
 		if(g_signal == SIGINT)
 		{
 			rl_event_hook = NULL;
-			rl_done = 0; // <-- CRUCIAL: Limpiar el flag para el prompt principal
+			rl_done = 0;
 			free(line);
 			return (0);
 		}
 		if (ft_strncmp(line, node->file, ft_strlen(node->file) + 1) == 0)
 			break ;
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
+		if(fd != -1)
+		{
+			write(fd, line, ft_strlen(line));
+			write(fd, "\n", 1);
+		}
 		free(line);
 	}
 	rl_event_hook = NULL;
 	rl_done = 0;
 	free(line);
+	if(fd == -1)
+		return (0);
 	return (1);
 }
 
@@ -80,17 +85,12 @@ static int	is_heredoc(t_redir *node, int i, int pid)
 		if (fd < 0)
 		{
 			perror("Error de Lectura de archivo 1");
-			free(route_path_tmp);
-			return (0);
 		}
 		if(!heredoc_readline(fd, line, node))
 		{
 			close(fd);
-			unlink(node->file);
-			free(node->file);
 			unlink(route_path_tmp);
 			free(route_path_tmp);
-			node->file = NULL;
 			return (0);
 		}
 		close(fd);
@@ -106,17 +106,23 @@ int	exec_heredoc(t_cmd *cmd, int nb_cmd, int pid)
 	t_cmd	*current;
 	t_redir	*node;
 	int		i;
+	int		j;
 
 	current = cmd;
 	i = 0;
+	j = 0;
 	while (i < nb_cmd)
 	{
 		node = current->redirections;
 		while (node != NULL)
 		{
-			if (!is_heredoc(node, i, pid))
+			if (!is_heredoc(node, j, pid))
+			{
+				erase_before_files(cmd, node);
 				return (0);
+			}
 			node = node->next;
+			j++;
 		}
 		current = current->next;
 		i++;
