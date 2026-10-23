@@ -23,6 +23,6 @@ int	builtin_pwd(t_shell *shell, char **cmd_args)
 		perror("pwd");
 		return (1);
 	}
-	ft_putendl_fd("¡ESTE ES MI PROPIO BUILTIN DE PWD!", STDOUT_FILENO);	ft_putendl_fd(buf, STDOUT_FILENO);
+	ft_putendl_fd(buf, STDOUT_FILENO);
 	return (0);
 }
