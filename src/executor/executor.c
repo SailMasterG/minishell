@@ -51,7 +51,7 @@ static int	malloc_pids(t_shell *shell)
 static int	run_heredoc(t_shell *shell )
 {
 	set_signal_mode(HEREDOC);
-	if (exec_heredoc(shell->cmds, shell->cmd_count, getpid()))
+	if (!exec_heredoc(shell->cmds, shell->cmd_count, getpid()))
 		return (1);
 	free(shell->pids);
 	shell->pids = NULL;
@@ -83,7 +83,7 @@ int	executor(t_shell *shell)
 	if (builtin != NULL && shell->cmd_count == 1)
 	{
 		code = run_builtin_parent(shell, builtin, shell->cmds);
-		return (free(shell->pids), shell->pids = NULL, code);
+		return (free(shell->pids), shell->exit_status = code, code);
 	}
 	if (!exec_loop(shell, fd, current))
 		return (free(shell->pids), 1);
