@@ -44,10 +44,7 @@ char	**extract_paths(char **envp)
 		i++;
 	}
 	if (!paths_env)
-	{
-		ft_printf("Error: PATH not found in environment variables.\n");
 		return (NULL);
-	}
 	return (paths_env);
 }
 
