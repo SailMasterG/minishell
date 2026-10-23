@@ -32,7 +32,6 @@ typedef struct s_redir
 	t_redir_type	type;
 	char			*file;
 	struct s_redir	*next;
-	int				heredoc_fd;
 	bool			is_quoted;
 }				t_redir;
 
