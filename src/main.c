@@ -42,8 +42,8 @@ int	entry_exec(char *line, t_shell *shell)
 	shell->cmds = parse(line, shell);
 	if (!shell->cmds)
 		return (free(line), 1);
-	if (executor(shell))
-		free(line);
+	executor(shell);
+	free(line);
 	return (0);
 }
 
