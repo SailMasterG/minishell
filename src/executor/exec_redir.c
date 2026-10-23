@@ -81,6 +81,7 @@ static int	redir_heredoc(t_redir *node)
 	}
 	unlink(node->file);
 	free(node->file);
+	node->file = NULL;
 	if (dup2(fd_redir, STDIN_FILENO) == -1)
 	{
 		close(fd_redir);
