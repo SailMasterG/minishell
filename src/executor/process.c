@@ -59,10 +59,19 @@ int	wait_pid(pid_t *pid, int nb_cmd)
 
 static void	run_child(t_shell *shell, int i, int *fd, t_cmd *current)
 {
+	t_builtin	builtin;
+	int			code;
+
 	set_signal_mode(FORKED);
 	setup_child_pipes(shell, i, fd);
 	if (redirs_cmd(current->redirections) != 0)
 		childs_exit(shell, i, fd, 1);
+	builtin = get_builtin(current->cmd_args[0]);
+	if (builtin != NULL)
+	{
+		code = builtin(shell, current->cmd_args);
+		childs_exit(shell, i, fd, code);
+	}
 	if (current->cmd_args[0] == NULL)
 		childs_exit(shell, i, fd, 0);
 	if (current->path == NULL)
@@ -72,10 +81,7 @@ static void	run_child(t_shell *shell, int i, int *fd, t_cmd *current)
 		childs_exit(shell, i, fd, 127);
 	}
 	if ((execve(current->path, current->cmd_args, shell->env)) == -1)
-	{
-		perror(current->cmd_args[0]);
-		childs_exit(shell, i, fd, 127);
-	}
+		(perror(current->cmd_args[0]), childs_exit(shell, i, fd, 127));
 }
 
 int	fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
