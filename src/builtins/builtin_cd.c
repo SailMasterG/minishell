@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 21:14:13 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/23 19:00:34 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/24 11:06:54 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,6 @@ char	*search_paths(char **envp, char *key)
 		i++;
 	}
 	return (NULL);
-}
-
-int	env_pos(char **envp, char *key)
-{
-	int		i;
-	int		len;
-
-	len = strlen(key);
-	i = 0;
-	while (envp[i] != NULL)
-	{
-		if (ft_strncmp(envp[i], key, len) == 0 && envp[i][len] == '=' )
-			return (i);
-		i++;
-	}
-	return (-1);
 }
 
 int	set_env(char **envp, char *cwd, char *key)
