@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/24 11:06:18 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/24 11:07:23 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/24 19:41:41 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,3 @@ int	env_pos(char **envp, char *key)
 	}
 	return (-1);
 }
-
