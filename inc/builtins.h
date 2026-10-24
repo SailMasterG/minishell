@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 14:49:04 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/22 20:31:33 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/24 11:07:48 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,6 @@ int			builtin_env(t_shell *shell, char **cmd_args);
 int			builtin_exit(t_shell *shell, char **cmd_args);
 int			is_parent_builtin(char *cmd);
 int			run_builtin_parent(t_shell *shell, t_builtin fn, t_cmd *cmd);
+int			env_pos(char **envp, char *key);
 
 #endif // H_BUILTINS
