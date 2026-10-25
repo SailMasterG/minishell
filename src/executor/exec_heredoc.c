@@ -6,50 +6,56 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 16:06:43 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/25 19:40:00 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/25 20:05:32 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-static int	heredoc_event_hook(void)
+static int	hdoc_pro_line(int fd, char *line, t_redir *node, t_shell *shell)
 {
+	char	*expanded_line;
+
 	if (g_signal == SIGINT)
-		rl_done = 1;
-	return (0);
+	{
+		free(line);
+		return (0);
+	}
+	if (ft_strncmp(line, node->file, ft_strlen(node->file) + 1) == 0)
+	{
+		free(line);
+		return (0);
+	}
+	if (fd != -1)
+	{
+		expanded_line = heredoc_expand(line, shell);
+		if (expanded_line)
+		{
+			ft_putendl_fd(expanded_line, fd);
+			free(expanded_line);
+		}
+	}
+	free(line);
+	return (1);
 }
 
 static int	heredoc_readline(int fd, char *line, t_redir *node, t_shell *shell)
 {
-	char	*expanded_line;
-
 	while (1)
 	{
 		rl_event_hook = heredoc_event_hook;
 		line = readline("heredoc>");
-		if (line == NULL)
-			break ;
-		if (g_signal == SIGINT)
+		if (line == NULL || g_signal == SIGINT)
 		{
-			rl_event_hook = NULL;
-			rl_done = 0;
 			free(line);
-			return (0);
-		}
-		if (ft_strncmp(line, node->file, ft_strlen(node->file) + 1) == 0)
 			break ;
-		if (fd != -1)
-		{
-			expanded_line = heredoc_expand(line, shell);
-			ft_putendl_fd(expanded_line, fd);
-			free(expanded_line);
 		}
-		free(line);
+		if (!hdoc_pro_line(fd, line, node, shell))
+			break ;
 	}
 	rl_event_hook = NULL;
 	rl_done = 0;
-	free(line);
-	if (fd == -1)
+	if (g_signal == SIGINT || fd == -1)
 		return (0);
 	return (1);
 }

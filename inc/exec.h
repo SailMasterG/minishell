@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 22:11:11 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/25 19:24:54 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/25 19:58:32 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ void	setup_child_pipes(t_shell *shell, int i, int *fd);
 int		pipe_creator(t_shell *shell, int i, int *fd, pid_t *pid);
 void	erase_before_files(t_cmd *cmd, t_redir *limit);
 char	*heredoc_expand(char *value, t_shell *shell);
+int		heredoc_event_hook(void);
 
 #endif // !EXEC_H
