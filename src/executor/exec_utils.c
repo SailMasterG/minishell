@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 22:01:37 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/25 19:14:28 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/25 19:35:47 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	erase_before_files(t_cmd *cmd, t_redir *limit)
 	}
 	return ;
 }
+
 char	*heredoc_expand(char *value, t_shell *shell)
 {
 	char	*env;

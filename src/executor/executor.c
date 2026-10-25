@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 16:13:08 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/22 20:20:41 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/25 19:25:33 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	malloc_pids(t_shell *shell)
 static int	run_heredoc(t_shell *shell )
 {
 	set_signal_mode(HEREDOC);
-	if (exec_heredoc(shell->cmds, shell->cmd_count, getpid()))
+	if (exec_heredoc(shell, getpid()))
 		return (1);
 	free(shell->pids);
 	shell->pids = NULL;
