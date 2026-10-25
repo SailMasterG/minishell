@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+       */
+/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 22:01:37 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/22 16:08:09 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/25 19:14:28 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,22 @@ void	erase_before_files(t_cmd *cmd, t_redir *limit)
 		current = current->next;
 	}
 	return ;
+}
+char	*heredoc_expand(char *value, t_shell *shell)
+{
+	char	*env;
+	bool	dummy_is_var;
+	int		i;
+
+	env = ft_strdup("");
+	i = -1;
+	while (value[++i])
+	{
+		if (value[i] == '$')
+			env = join_expand(env, value_expand(value, &i, shell),
+					true, &dummy_is_var);
+		else
+			env = ft_strjoin_char(env, value[i]);
+	}
+	return (env);
 }
