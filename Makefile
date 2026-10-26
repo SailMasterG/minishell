@@ -37,6 +37,7 @@ SRC = main.c \
 	  builtins/builtin_export.c \
 	  builtins/builtin_unset.c \
 	  builtins/bultin_utils.c \
+	  builtins/builtin_export_utils.c \
 
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 
