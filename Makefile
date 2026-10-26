@@ -25,6 +25,7 @@ SRC = main.c \
 	  executor/exec_utils.c \
 	  executor/exec_redir.c \
 	  executor/exec_heredoc.c \
+	  executor/heredoc_utils.c \
 	  executor/exec_path.c \
 	  executor/process.c \
 	  executor/pipes.c \

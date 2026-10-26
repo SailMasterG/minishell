@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+       */
+/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 22:01:37 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/22 16:08:09 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/25 19:59:42 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
