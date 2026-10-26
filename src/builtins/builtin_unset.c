@@ -3,26 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_unset.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 21:14:24 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/24 16:20:53 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/26 20:48:58 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-//Debe eliminar la variable de ambiente dada como argumento.
-//Como debe hacerlo.??
-//Si no tiene argumentos debe mostrar que no hay  "unset: not enough arguments"
-//Debe acceder a la variable y contar cuantos elementos hay actualmente,
-// luego reserva un nuevo array del tamaño de la lista anterior - el elemento
-// a eliminar, donde ira el nuevo array
-// recorrer la lista envp mientras que no sea null ,agregamos los punteros al
-// nuevo arreglo si no son  la variable  y tambien + 1en (key) + 1 sea igual = ,
-//saltamos al siguiente
-//agregar NULL al final.
-//Debe retornar la lista de variable de ambiente actualizada
 int	filter_envp(t_shell *shell, char **cmd_args)
 {
 	int	i;
@@ -90,8 +79,6 @@ int	builtin_unset(t_shell *shell, char **cmd_args)
 	int		len_env;
 	char	**new_env;
 
-	//printf("==================ANTES===============\n");
-	//printenvp(shell);
 	len_env = 0;
 	if (cmd_args[1] == NULL)
 		return (0);
@@ -103,7 +90,5 @@ int	builtin_unset(t_shell *shell, char **cmd_args)
 		return (1);
 	}
 	compact_envp(shell, new_env, len_env);
-	//printf("==================DESPUES===============\n");
-	//printenvp(shell);
 	return (0);
 }
