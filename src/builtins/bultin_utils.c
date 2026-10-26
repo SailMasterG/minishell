@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/24 11:06:18 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/26 17:32:57 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/26 17:34:11 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	env_pos(char **envp, char *key)
 	int		i;
 	int		len;
 
-	len = strlen(key);
+	len = ft_strlen(key);
 	i = 0;
 	while (envp[i] != NULL)
 	{
