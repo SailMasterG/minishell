@@ -31,4 +31,3 @@ int	builtin_env(t_shell *shell, char **cmd_args)
 	}
 	return (1);
 }
-
