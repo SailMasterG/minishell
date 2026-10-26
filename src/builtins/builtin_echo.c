@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 21:13:16 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/23 15:57:50 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/26 20:38:04 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
