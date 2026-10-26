@@ -88,7 +88,5 @@ int	builtin_cd(t_shell *shell, char **cmd_args)
 	}
 	else
 		path = cmd_args[1];
-	if (!change_dir(shell, path))
-		return (1);
-	return (0);
+	return (change_dir(shell, path));
 }
