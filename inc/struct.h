@@ -54,6 +54,7 @@ typedef struct s_shell
 	bool			print_newline;
 	char			**env;
 	long long		exit_status;
+	bool			is_exitting;
 }			t_shell;
 
 #endif

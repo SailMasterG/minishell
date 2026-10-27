@@ -51,7 +51,7 @@ void	show_prompt(t_shell *shell)
 {
 	char	*line;
 
-	while (1)
+	while (!shell->is_exitting)
 	{
 		set_signal_mode(INTERACTIVE);
 		g_signal = 0;
@@ -71,7 +71,6 @@ void	show_prompt(t_shell *shell)
 		else if (line[0] && entry_exec(line, shell) == 1)
 			continue ;
 	}
-	free(line);
 }
 
 int	main(int ac, char **av, char **env)
@@ -80,6 +79,7 @@ int	main(int ac, char **av, char **env)
 
 	if (ac > 1 && av[0])
 		return (1);
+	shell.is_exitting = false;
 	shell.pids = NULL;
 	shell.print_newline = true;
 	shell.env = enver(env);
@@ -89,5 +89,5 @@ int	main(int ac, char **av, char **env)
 	if (shell.cmds)
 		free_cmds(shell.cmds);
 	ft_strfree(shell.env);
-	return (0);
+	return (shell.exit_status);
 }
