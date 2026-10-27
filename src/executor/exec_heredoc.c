@@ -3,47 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   exec_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 16:06:43 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/22 16:06:52 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/25 20:05:32 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/include.h"
 
-static int	heredoc_event_hook(void)
+static int	hdoc_pro_line(int fd, char *line, t_redir *node, t_shell *shell)
 {
+	char	*expanded_line;
+
 	if (g_signal == SIGINT)
-		rl_done = 1;
-	return (0);
+	{
+		free(line);
+		return (0);
+	}
+	if (ft_strncmp(line, node->file, ft_strlen(node->file) + 1) == 0)
+	{
+		free(line);
+		return (0);
+	}
+	if (fd != -1)
+	{
+		expanded_line = heredoc_expand(line, shell);
+		if (expanded_line)
+		{
+			ft_putendl_fd(expanded_line, fd);
+			free(expanded_line);
+		}
+	}
+	free(line);
+	return (1);
 }
 
-static int	heredoc_readline(int fd, char *line, t_redir *node)
+static int	heredoc_readline(int fd, char *line, t_redir *node, t_shell *shell)
 {
 	while (1)
 	{
 		rl_event_hook = heredoc_event_hook;
 		line = readline("heredoc>");
-		if (line == NULL)
-			break ;
-		if (g_signal == SIGINT)
+		if (line == NULL || g_signal == SIGINT)
 		{
-			rl_event_hook = NULL;
-			rl_done = 0;
 			free(line);
-			return (0);
-		}
-		if (ft_strncmp(line, node->file, ft_strlen(node->file) + 1) == 0)
 			break ;
-		if (fd != -1)
-			ft_putendl_fd(line, fd);
-		free(line);
+		}
+		if (!hdoc_pro_line(fd, line, node, shell))
+			break ;
 	}
 	rl_event_hook = NULL;
 	rl_done = 0;
-	free(line);
-	if (fd == -1)
+	if (g_signal == SIGINT || fd == -1)
 		return (0);
 	return (1);
 }
@@ -68,7 +80,7 @@ static char	*heredoc_path_temp(int i, int pid)
 	return (route_path);
 }
 
-static int	is_heredoc(t_redir *node, int i, int pid)
+static int	is_heredoc(t_redir *node, int i, int pid, t_shell *shell)
 {
 	int		fd;
 	char	*line;
@@ -83,7 +95,7 @@ static int	is_heredoc(t_redir *node, int i, int pid)
 		{
 			perror("Error de Lectura de archivo 1");
 		}
-		if (!heredoc_readline(fd, line, node))
+		if (!heredoc_readline(fd, line, node, shell))
 		{
 			close(fd);
 			unlink(route_path_tmp);
@@ -97,24 +109,24 @@ static int	is_heredoc(t_redir *node, int i, int pid)
 	return (1);
 }
 
-int	exec_heredoc(t_cmd *cmd, int nb_cmd, int pid)
+int	exec_heredoc(t_shell *shell, int pid )
 {
 	t_cmd	*current;
 	t_redir	*node;
 	int		i;
 	int		j;
 
-	current = cmd;
+	current = shell->cmds;
 	i = 0;
 	j = 0;
-	while (i < nb_cmd)
+	while (i < shell->cmd_count)
 	{
 		node = current->redirections;
 		while (node != NULL)
 		{
-			if (!is_heredoc(node, j, pid))
+			if (!is_heredoc(node, j, pid, shell))
 			{
-				erase_before_files(cmd, node);
+				erase_before_files(shell->cmds, node);
 				return (0);
 			}
 			node = node->next;

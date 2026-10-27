@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 14:16:25 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/16 14:19:28 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/25 19:28:33 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ bool			validation(t_token *head);
 bool			is_redir(t_token *tokens);
 void			mark_range(char *s);
 int				count_fields(char *value);
+char			*join_expand(char *env, char *value, bool is_dq, bool *is_var);
 
 void			debug_cmds(t_cmd *cmds);
 void			debug_redirs(t_cmd *cmd, int fd);
