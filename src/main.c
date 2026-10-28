@@ -54,10 +54,10 @@ void	show_prompt(t_shell *shell)
 	while (!shell->is_exitting)
 	{
 		set_signal_mode(INTERACTIVE);
-		g_signal = 0;
 		line = readline("Minishell: ");
 		if (g_signal == SIGINT)
 			shell->exit_status = SIGINT + 128;
+		g_signal = 0;
 		if (!line)
 		{
 			write(1, "exit\n", 5);
