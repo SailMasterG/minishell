@@ -88,6 +88,7 @@ static int	is_heredoc(t_redir *node, int i, int pid, t_shell *shell)
 
 	if (node->type == REDIR_HEREDOC)
 	{
+		g_signal = 0;
 		line = NULL;
 		route_path_tmp = heredoc_path_temp(i, pid);
 		fd = open(route_path_tmp, O_CREAT | O_WRONLY | O_TRUNC, 0644);
