@@ -93,19 +93,14 @@ static int	is_heredoc(t_redir *node, int i, int pid, t_shell *shell)
 		route_path_tmp = heredoc_path_temp(i, pid);
 		fd = open(route_path_tmp, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (fd < 0)
-		{
 			perror("Error de Lectura de archivo 1");
-		}
 		if (!heredoc_readline(fd, line, node, shell))
 		{
 			close(fd);
 			unlink(route_path_tmp);
 			return (free(route_path_tmp), 0);
 		}
-		close(fd);
-		free(node->file);
-		node->file = route_path_tmp;
-		return (1);
+		return (close(fd), free(node->file), node->file = route_path_tmp, 1);
 	}
 	return (1);
 }
