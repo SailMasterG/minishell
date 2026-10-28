@@ -58,7 +58,7 @@ int	builtin_echo(t_shell *shell, char **cmd_cmd_argss)
 			write(1, " ", 1);
 		i++;
 	}
-	if (!&is_flagged)
+	if (is_flagged(cmd_cmd_argss))
 		write(1, "\n", 1);
 	return (0);
 }
