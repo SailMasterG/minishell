@@ -25,10 +25,10 @@ char	*heredoc_expand(char *value, t_shell *shell, bool is_quoted)
 	bool	dummy_is_var;
 	int		i;
 
-	i = -1;
 	if (is_quoted)
 		return (ft_strdup(value));
 	env = ft_strdup("");
+	i = -1;
 	while (value[++i])
 	{
 		if (value[i] == '$')
