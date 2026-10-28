@@ -82,7 +82,7 @@ static void	run_child(t_shell *shell, int i, int *fd, t_cmd *current)
 	}
 	if ((execve(current->path, current->cmd_args, shell->env)) == -1)
 		(perror(current->cmd_args[0]),
-			childs_exit(shell, i, fd, 126 + (errno + ENOENT)));
+			childs_exit(shell, i, fd, 126 + (errno == ENOENT)));
 }
 
 int	fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
