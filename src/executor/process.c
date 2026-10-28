@@ -28,33 +28,28 @@ void	childs_exit(t_shell *shell, int i, int *fd, int code)
 	exit(code);
 }
 
-int	wait_pid(pid_t *pid, int nb_cmd)
+void	wait_pid(t_shell *shell, pid_t *pid, int nb_cmd)
 {
 	int		status;
 	int		i;
-	int		code;
 	pid_t	caugth_pid;
 	pid_t	last_pid;
 
 	last_pid = pid[nb_cmd - 1];
 	i = -1;
-	code = 0;
 	while (++i < nb_cmd)
 	{
 		caugth_pid = waitpid(pid[i], &status, 0);
 		if (caugth_pid == last_pid)
 		{
+			if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
+				write(2, "Quit (core dumped)\n", 19);
 			if (WIFSIGNALED(status))
-			{
-				if (WTERMSIG(status) == SIGINT)
-					write(1, "\n", 1);
-				code = WTERMSIG(status) + 128;
-			}
-			else if (WIFEXITED(status))
-				code = WEXITSTATUS(status);
+				shell->exit_status = EXIT_SIGNAL_BASE + WTERMSIG(status);
+			else
+				shell->exit_status = WEXITSTATUS(status);
 		}
 	}
-	return (code);
 }
 
 static void	run_child(t_shell *shell, int i, int *fd, t_cmd *current)

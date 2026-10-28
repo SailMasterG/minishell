@@ -62,31 +62,29 @@ static int	run_heredoc(t_shell *shell )
 	return (0);
 }
 
-int	executor(t_shell *shell)
+void	executor(t_shell *shell)
 {
 	int			fd[2];
 	t_cmd		*current;
-	int			code;
 	t_builtin	builtin;
 
-	code = 0;
 	resolve_all_paths(shell->cmds, shell->env);
 	shell->cmd_count = count_cmd(shell->cmds);
 	shell->prevfd = -1;
 	current = shell->cmds;
 	if (!malloc_pids(shell))
-		return (1);
+		return ;
 	if (!run_heredoc(shell))
-		return (1);
+		return ;
 	set_signal_mode(EXECUTION);
 	builtin = get_builtin(current->cmd_args[0]);
 	if (builtin != NULL && shell->cmd_count == 1)
 	{
-		code = run_builtin_parent(shell, builtin, shell->cmds);
-		return (free(shell->pids), shell->exit_status = code, code);
+		shell->exit_status = run_builtin_parent(shell, builtin, shell->cmds);
+		return (shell->exit_status = 1, free(shell->pids));
 	}
 	if (!exec_loop(shell, fd, current))
-		return (free(shell->pids), 1);
-	code = wait_pid(shell->pids, shell->cmd_count);
-	return (free(shell->pids), shell->exit_status = code, code);
+		return (free(shell->pids));
+	wait_pid(shell, shell->pids, shell->cmd_count);
+	return (free(shell->pids));
 }

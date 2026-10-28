@@ -15,7 +15,7 @@
 
 # include "struct.h"
 
-int		executor(t_shell *shell);
+void	executor(t_shell *shell);
 int		exec_heredoc(t_shell *shell, int pid);
 int		count_cmd(t_cmd *cmd);
 void	resolve_all_paths(t_cmd *cmd, char **envp);
@@ -24,7 +24,7 @@ char	**extract_paths(char **envp);
 int		redirs_cmd(t_redir *node);
 void	childs_exit(t_shell *shell, int i, int *fd, int code);
 int		fork_setup(t_shell *shell, int i, int *fd, t_cmd *current);
-int		wait_pid(pid_t *pid, int nb_cmd);
+void	wait_pid(t_shell *shell, pid_t *pid, int nb_cmd);
 void	setup_child_pipes(t_shell *shell, int i, int *fd);
 int		pipe_creator(t_shell *shell, int i, int *fd, pid_t *pid);
 void	erase_before_files(t_cmd *cmd, t_redir *limit);
