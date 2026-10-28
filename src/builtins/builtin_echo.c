@@ -50,10 +50,10 @@ int	builtin_echo(t_shell *shell, char **cmd_cmd_argss)
 	j = 0;
 	while (cmd_cmd_argss[i])
 	{
-		if (cmd_cmd_argss[i][j] != 'n' && ft_strncmp(cmd_cmd_argss[i], "-n", 3)
+		if (cmd_cmd_argss[i][j] != 'n' && ft_strncmp(cmd_cmd_argss[i], "-n", 2)
 			&& cmd_cmd_argss[i][j] != ' ')
 			ft_putstr_fd(cmd_cmd_argss[i], 1);
-		if (cmd_cmd_argss[i][j] != 'n' && ft_strncmp(cmd_cmd_argss[i], "-n", 3)
+		if (cmd_cmd_argss[i][j] != 'n' && ft_strncmp(cmd_cmd_argss[i], "-n", 2)
 			&& cmd_cmd_argss[i][j] != ' ')
 			write(1, " ", 1);
 		i++;
