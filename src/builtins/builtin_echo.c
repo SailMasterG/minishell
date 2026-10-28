@@ -18,22 +18,23 @@ bool	is_flagged(char **cmd_args)
 	int		j;
 	bool	is_flagged;
 
-	i = 0;
+	i = 1;
 	j = 0;
 	is_flagged = false;
 	while (cmd_args[i])
 	{
 		while (cmd_args[i][j])
 		{
-			if (cmd_args[i][j] != '-' || cmd_args[i][j] != 'n')
-				is_flagged = false;
-			while (*cmd_args[i] == 'n')
-				i++;
-			if (cmd_args[i][j] == '\0')
-				is_flagged = true;
+			if (cmd_args[i][j] == '-' && cmd_args[i][j + 1] == 'n')
+			{
+				j++;
+				while (cmd_args[i][j] == 'n')
+					j++;
+				if (cmd_args[i][j] == '\0')
+					return (true);
+			}
 			else
-				is_flagged = false;
-			j++;
+				break ;
 		}
 		i++;
 	}
@@ -50,15 +51,15 @@ int	builtin_echo(t_shell *shell, char **cmd_cmd_argss)
 	j = 0;
 	while (cmd_cmd_argss[i])
 	{
-		if (cmd_cmd_argss[i][j] != 'n' && ft_strncmp(cmd_cmd_argss[i], "-n", 2)
+		if (cmd_cmd_argss[i][j] != 'n' && ft_strncmp(cmd_cmd_argss[i], "-n", 3)
 			&& cmd_cmd_argss[i][j] != ' ')
 			ft_putstr_fd(cmd_cmd_argss[i], 1);
-		if (cmd_cmd_argss[i][j] != 'n' && ft_strncmp(cmd_cmd_argss[i], "-n", 2)
-			&& cmd_cmd_argss[i][j] != ' ')
+		if (cmd_cmd_argss[i + 1] != NULL
+			&& ft_strncmp(cmd_cmd_argss[i], "-n", 3))
 			write(1, " ", 1);
 		i++;
 	}
-	if (is_flagged(cmd_cmd_argss))
+	if (!is_flagged(cmd_cmd_argss))
 		write(1, "\n", 1);
 	return (0);
 }
