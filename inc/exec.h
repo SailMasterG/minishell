@@ -28,7 +28,6 @@ int		wait_pid(pid_t *pid, int nb_cmd);
 void	setup_child_pipes(t_shell *shell, int i, int *fd);
 int		pipe_creator(t_shell *shell, int i, int *fd, pid_t *pid);
 void	erase_before_files(t_cmd *cmd, t_redir *limit);
-char	*heredoc_expand(char *value, t_shell *shell);
 int		heredoc_event_hook(void);
-
+char	*heredoc_expand(char *value, t_shell *shell, bool is_quoted);
 #endif // !EXEC_H
