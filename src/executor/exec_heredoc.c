@@ -28,7 +28,7 @@ static int	hdoc_pro_line(int fd, char *line, t_redir *node, t_shell *shell)
 	}
 	if (fd != -1)
 	{
-		expanded_line = heredoc_expand(line, shell);
+		expanded_line = heredoc_expand(line, shell, node->is_quoted);
 		if (expanded_line)
 		{
 			ft_putendl_fd(expanded_line, fd);

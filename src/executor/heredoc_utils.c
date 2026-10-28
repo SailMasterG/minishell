@@ -19,12 +19,14 @@ int	heredoc_event_hook(void)
 	return (0);
 }
 
-char	*heredoc_expand(char *value, t_shell *shell)
+char	*heredoc_expand(char *value, t_shell *shell, bool is_quoted)
 {
 	char	*env;
 	bool	dummy_is_var;
 	int		i;
 
+	if (is_quoted)
+		return (ft_strdup(value));
 	env = ft_strdup("");
 	i = -1;
 	while (value[++i])
