@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 21:14:13 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/24 11:06:54 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/29 17:14:03 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	change_dir(t_shell *shell, char *path)
 		perror ("getcwd");
 		return (1);
 	}
-	if (set_env(envp, cwd, "OLDPWD="))
+	if (set_env(envp, cwd, "PWD="))
 		return (1);
 	if (chdir(path) == -1)
 	{
@@ -61,7 +61,7 @@ static int	change_dir(t_shell *shell, char *path)
 		perror(shell->cmds->cmd_args[1]);
 		return (1);
 	}
-	if (set_env(envp, cwd, "PWD="))
+	if (set_env(envp, cwd, "OLDPWD="))
 		return (1);
 	free(cwd);
 	return (0);
