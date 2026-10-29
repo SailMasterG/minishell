@@ -71,8 +71,8 @@ int	builtin_exit(t_shell *shell, char **cmd_args)
 	if (cmd_args[1] && cmd_args[2])
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
-		shell->exit_status = 1;
-		return (1);
+		shell->exit_status = 2;
+		return (2);
 	}
 	shell->is_exitting = true;
 	return (shell->exit_status);

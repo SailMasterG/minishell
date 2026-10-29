@@ -14,14 +14,14 @@
 
 char	*search_paths(char **envp, char *key)
 {
-	int		i;
-	int		len;
+	int	i;
+	int	len;
 
 	len = ft_strlen(key);
 	i = 0;
 	while (envp[i] != NULL)
 	{
-		if (ft_strncmp(envp[i], key, len) == 0 && envp[i][len] == '=' )
+		if (ft_strncmp(envp[i], key, len) == 0 && envp[i][len] == '=')
 			return (envp[i] + len + 1);
 		i++;
 	}
@@ -36,7 +36,7 @@ int	set_env(char **envp, char *cwd, char *key)
 	pos = env_pos(envp, key);
 	if (pos == -1)
 		return (0);
-	free (envp[pos]);
+	free(envp[pos]);
 	envp[pos] = ft_strjoin(key, cwd);
 	return (1);
 }
@@ -50,7 +50,7 @@ static int	change_dir(t_shell *shell, char *path)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
-		perror ("getcwd");
+		perror("getcwd");
 		return (1);
 	}
 	if (set_env(envp, cwd, "PWD="))
@@ -71,6 +71,11 @@ int	builtin_cd(t_shell *shell, char **cmd_args)
 {
 	char	*path;
 
+	if (cmd_args[1] && cmd_args[2])
+	{
+		ft_putendl_fd("too many arguments", 2);
+		return (2);
+	}
 	if (cmd_args[1] == NULL)
 	{
 		path = search_paths(shell->env, "HOME");
