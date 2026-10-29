@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 16:06:43 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/25 20:05:32 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/29 16:43:49 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ static int	is_heredoc(t_redir *node, int i, int pid, t_shell *shell)
 	return (1);
 }
 
-int	exec_heredoc(t_shell *shell, int pid )
+int	exec_heredoc(t_shell *shell)
 {
 	t_cmd	*current;
 	t_redir	*node;
@@ -120,7 +120,7 @@ int	exec_heredoc(t_shell *shell, int pid )
 		node = current->redirections;
 		while (node != NULL)
 		{
-			if (!is_heredoc(node, j, pid, shell))
+			if (!is_heredoc(node, j, i, shell))
 			{
 				erase_before_files(shell->cmds, node);
 				return (0);

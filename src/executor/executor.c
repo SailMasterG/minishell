@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 16:13:08 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/25 19:25:33 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/29 16:41:07 by chguerre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	malloc_pids(t_shell *shell)
 static int	run_heredoc(t_shell *shell)
 {
 	set_signal_mode(HEREDOC);
-	if (exec_heredoc(shell, getpid()))
+	if (exec_heredoc(shell))
 		return (1);
 	free(shell->pids);
 	shell->pids = NULL;
