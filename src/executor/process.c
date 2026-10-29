@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/19 20:36:59 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/29 15:11:50 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/29 15:28:51 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,10 @@ static void	run_child(t_shell *shell, int i, int *fd, t_cmd *current)
 		ft_putendl_fd(": command not found", 2);
 		childs_exit(shell, i, fd, 127);
 	}
-	if ((execve(current->path, current->cmd_args, shell->env)) == -1)
-		(perror(current->cmd_args[0]), childs_exit(shell, i, fd, 126
-				+ (errno == ENOENT)));
+	execve(current->path, current->cmd_args, shell->env);
+	code = errno;
+	perror(current->cmd_args[0]);
+	childs_exit(shell, i, fd, 126 + (code == ENOENT));
 }
 
 int	fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
