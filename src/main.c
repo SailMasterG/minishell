@@ -72,6 +72,8 @@ void	show_prompt(t_shell *shell)
 		else if (line[0] && entry_exec(line, shell) == 1)
 			continue ;
 	}
+	close(0);
+	close(1);
 }
 
 int	main(int ac, char **av, char **env)
@@ -90,7 +92,5 @@ int	main(int ac, char **av, char **env)
 	if (shell.cmds)
 		free_cmds(shell.cmds);
 	ft_strfree(shell.env);
-	close(0);
-	close(1);
 	return (shell.exit_status);
 }
