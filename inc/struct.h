@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 14:09:15 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/10/16 14:42:36 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/29 15:35:14 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 # define EXIT_SIGNAL_BASE 128
 # define WS_SEP '\001'
 
-# include "libft/libft.h"
 # include "enum.h"
+# include "libft/libft.h"
 
 typedef struct s_token
 {
@@ -25,7 +25,7 @@ typedef struct s_token
 	bool			is_quoted;
 	char			*value;
 	struct s_token	*next;
-}				t_token;
+}					t_token;
 
 typedef struct s_redir
 {
@@ -33,7 +33,7 @@ typedef struct s_redir
 	char			*file;
 	struct s_redir	*next;
 	bool			is_quoted;
-}				t_redir;
+}					t_redir;
 
 typedef struct s_cmd
 {
@@ -41,13 +41,11 @@ typedef struct s_cmd
 	char			*path;
 	t_redir			*redirections;
 	struct s_cmd	*next;
-}				t_cmd;
+}					t_cmd;
 
 typedef struct s_shell
 {
-	pid_t			hereid;
 	int				prevfd;
-	int				wread[2];
 	int				cmd_count;
 	pid_t			*pids;
 	t_cmd			*cmds;
@@ -55,6 +53,6 @@ typedef struct s_shell
 	char			**env;
 	long long		exit_status;
 	bool			is_exitting;
-}			t_shell;
+}					t_shell;
 
 #endif
