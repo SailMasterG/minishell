@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/19 20:36:59 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/29 15:28:51 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/10/29 15:49:32 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	childs_exit(t_shell *shell, int i, int *fd, int code)
 {
 	if (shell->prevfd != -1)
 		close(shell->prevfd);
-	if (i < shell->cmd_count - 1)
-		(void)fd;
+	(void)fd;
+	(void)i;
 	if (shell->pids != NULL)
 		free(shell->pids);
 	ft_strfree(shell->env);
