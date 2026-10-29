@@ -45,6 +45,11 @@ int	run_builtin_parent(t_shell *shell, t_builtin builtin, t_cmd *cmd)
 	dup2(saved_in, STDIN_FILENO);
 	close(saved_in);
 	close(saved_out);
+	if (shell->is_exitting)
+	{
+		close(0);
+		close(1);
+	}
 	return (code);
 }
 
