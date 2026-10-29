@@ -12,54 +12,39 @@
 
 #include "../../inc/include.h"
 
-bool	is_flagged(char **cmd_args)
+static bool	is_n_flag(char *arg)
 {
-	int		i;
-	int		j;
-	bool	is_flagged;
-
-	i = 1;
-	j = 0;
-	is_flagged = false;
-	while (cmd_args[i])
-	{
-		while (cmd_args[i][j])
-		{
-			if (cmd_args[i][j] == '-' && cmd_args[i][j + 1] == 'n')
-			{
-				j++;
-				while (cmd_args[i][j] == 'n')
-					j++;
-				if (cmd_args[i][j] == '\0')
-					return (true);
-			}
-			else
-				break ;
-		}
-		i++;
-	}
-	return (is_flagged);
-}
-
-int	builtin_echo(t_shell *shell, char **cmd_cmd_argss)
-{
-	int	i;
 	int	j;
 
-	(void) shell;
+	if (arg[0] != '-' || arg[1] != 'n')
+		return (false);
+	j = 1;
+	while (arg[j] == 'n')
+		j++;
+	return (arg[j] == '\0');
+}
+
+int	builtin_echo(t_shell *shell, char **cmd_args)
+{
+	int		i;
+	bool	newline;
+
+	(void)shell;
 	i = 1;
-	j = 0;
-	while (cmd_cmd_argss[i])
+	newline = true;
+	while (cmd_args[i] && is_n_flag(cmd_args[i]))
 	{
-		if (cmd_cmd_argss[i][j] != 'n' && ft_strncmp(cmd_cmd_argss[i], "-n", 3)
-			&& cmd_cmd_argss[i][j] != ' ')
-			ft_putstr_fd(cmd_cmd_argss[i], 1);
-		if (cmd_cmd_argss[i + 1] != NULL
-			&& ft_strncmp(cmd_cmd_argss[i], "-n", 3))
+		newline = false;
+		i++;
+	}
+	while (cmd_args[i])
+	{
+		ft_putstr_fd(cmd_args[i], 1);
+		if (cmd_args[i + 1])
 			write(1, " ", 1);
 		i++;
 	}
-	if (!is_flagged(cmd_cmd_argss))
+	if (newline)
 		write(1, "\n", 1);
 	return (0);
 }
