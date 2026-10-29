@@ -3,7 +3,8 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+		  */
+/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+
+				+#+			*/
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 14:06:14 by rpinheir          #+#    #+#             */
 /*   Updated: 2026/10/22 16:19:18 by rpinheir         ###   ########.ch       */
@@ -71,6 +72,8 @@ void	show_prompt(t_shell *shell)
 		else if (line[0] && entry_exec(line, shell) == 1)
 			continue ;
 	}
+	close(0);
+	close(1);
 }
 
 int	main(int ac, char **av, char **env)

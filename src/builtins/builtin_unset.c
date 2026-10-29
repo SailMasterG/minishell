@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 21:14:24 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/26 20:48:58 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/29 15:33:37 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ int	filter_envp(t_shell *shell, char **cmd_args)
 		i = 1;
 		while (cmd_args[i])
 		{
-			keylen = strlen(cmd_args[i]);
-			if (shell->env[j] != NULL && ft_strncmp(shell->env[j],
-					cmd_args[i], keylen) == 0 && shell->env[j][keylen] == '=' )
+			keylen = ft_strlen(cmd_args[i]);
+			if (shell->env[j] != NULL && ft_strncmp(shell->env[j], cmd_args[i],
+					keylen) == 0 && shell->env[j][keylen] == '=')
 			{
 				finded++;
 				(free(shell->env[j]), shell->env[j] = NULL);

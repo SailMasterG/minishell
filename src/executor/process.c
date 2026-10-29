@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/19 20:36:59 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/22 21:08:47 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/29 15:49:32 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,8 @@ void	childs_exit(t_shell *shell, int i, int *fd, int code)
 {
 	if (shell->prevfd != -1)
 		close(shell->prevfd);
-	if (i < shell->cmd_count - 1)
-	{
-		close(fd[0]);
-		close(fd[1]);
-	}
+	(void)fd;
+	(void)i;
 	if (shell->pids != NULL)
 		free(shell->pids);
 	ft_strfree(shell->env);
@@ -75,9 +72,10 @@ static void	run_child(t_shell *shell, int i, int *fd, t_cmd *current)
 		ft_putendl_fd(": command not found", 2);
 		childs_exit(shell, i, fd, 127);
 	}
-	if ((execve(current->path, current->cmd_args, shell->env)) == -1)
-		(perror(current->cmd_args[0]),
-			childs_exit(shell, i, fd, 126 + (errno == ENOENT)));
+	execve(current->path, current->cmd_args, shell->env);
+	code = errno;
+	perror(current->cmd_args[0]);
+	childs_exit(shell, i, fd, 126 + (code == ENOENT));
 }
 
 int	fork_setup(t_shell *shell, int i, int *fd, t_cmd *current)
