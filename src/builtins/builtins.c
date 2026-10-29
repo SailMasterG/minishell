@@ -6,7 +6,7 @@
 /*   By: chguerre <chguerre@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 14:32:50 by chguerre          #+#    #+#             */
-/*   Updated: 2026/10/22 21:15:57 by chguerre         ###   ########.fr       */
+/*   Updated: 2026/10/29 15:12:19 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ int	run_builtin_parent(t_shell *shell, t_builtin builtin, t_cmd *cmd)
 	dup2(saved_in, STDIN_FILENO);
 	close(saved_in);
 	close(saved_out);
-	if (shell->is_exitting)
-		(close(0), close(1));
 	return (code);
 }
 

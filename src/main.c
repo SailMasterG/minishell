@@ -3,7 +3,8 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+       +#+		  */
+/*   By: chguerre <chr@student.lausanne.ch>          +#+  +:+
+				+#+			*/
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/16 14:06:14 by rpinheir          #+#    #+#             */
 /*   Updated: 2026/10/22 16:19:18 by rpinheir         ###   ########.ch       */
@@ -89,5 +90,7 @@ int	main(int ac, char **av, char **env)
 	if (shell.cmds)
 		free_cmds(shell.cmds);
 	ft_strfree(shell.env);
+	close(0);
+	close(1);
 	return (shell.exit_status);
 }
