@@ -25,30 +25,43 @@ void	childs_exit(t_shell *shell, int i, int *fd, int code)
 	exit(code);
 }
 
+static bool	get_caught_pid(pid_t *pid, int *status, int i, pid_t last_pid)
+{
+	pid_t	caugth_pid;
+
+	caugth_pid = waitpid(pid[i], status, 0);
+	if (caugth_pid == last_pid)
+		return (true);
+	return (false);
+}
+
 void	wait_pid(t_shell *shell, pid_t *pid, int nb_cmd)
 {
 	int		status;
 	int		i;
-	pid_t	caugth_pid;
 	pid_t	last_pid;
+	bool	is_child_sigint;
 
+	status = 0;
 	last_pid = pid[nb_cmd - 1];
 	i = -1;
+	is_child_sigint = false;
 	while (++i < nb_cmd)
 	{
-		caugth_pid = waitpid(pid[i], &status, 0);
-		if (caugth_pid == last_pid)
+		if (get_caught_pid(pid, &status, i, last_pid))
 		{
 			if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
 				write(2, "Quit (core dumped)\n", 19);
-			if (WTERMSIG(status) == SIGINT)
-				write(2, "\n", 1);
 			if (WIFSIGNALED(status))
 				shell->exit_status = EXIT_SIGNAL_BASE + WTERMSIG(status);
 			else
 				shell->exit_status = WEXITSTATUS(status);
 		}
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+			is_child_sigint = true;
 	}
+	if (is_child_sigint)
+		write(2, "\n", 1);
 }
 
 static void	run_child(t_shell *shell, int i, int *fd, t_cmd *current)
