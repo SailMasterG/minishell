@@ -80,19 +80,24 @@ eof
 
 # Resources
 
+### AI usage
+
+AI has been used for debugging purposes only, it has also been used to introduce new notions aside from reading other sources to get a better understanding quicker.
+Other than that, no AI has been used to do the coding in our place.
+
 ### Minishell 42 Guides
 
-### Parsing/Lexer Theory
+## Parsing/Lexer Theory
 
 - [Intro to Parsing & Lexing](https://dev.to/elipie/intro-to-parsing-lexing-3g01) -- basics for beginners
 - [Shell parsing tips](https://shell.multun.net/parser.html) -- shell parser in detail
 - [Bash guide on expansion/substituition](https://thealternative.ch/en/bash)
 
-### Videos
+## Videos
 
 - [Bash Shell Operation In Depth](https://youtube.com/watch?v=GGNzB_o4OiM) -- how bash processes a command
 - [Build a simple shell in C](https://youtube.com/watch?v=yTR00r8vBH8) -- shell from scratch
 
-### Others:
+## Others:
 
 - [Code crafters](https://app.codecrafters.io/courses/shell/overview) -- non 42 project that is also very close to what we have to do
