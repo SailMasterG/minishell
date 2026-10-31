@@ -59,7 +59,7 @@ static int	change_dir(t_shell *shell, char *path)
 	{
 		write(2, "minishell: cd: ", 15);
 		perror(shell->cmds->cmd_args[1]);
-		return (1);
+		return (free(cwd), 1);
 	}
 	if (set_env(envp, cwd, "OLDPWD="))
 		return (1);
