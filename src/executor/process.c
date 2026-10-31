@@ -41,6 +41,8 @@ void	wait_pid(t_shell *shell, pid_t *pid, int nb_cmd)
 		{
 			if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
 				write(2, "Quit (core dumped)\n", 19);
+			if (WTERMSIG(status) == SIGINT)
+				write(2, "\n", 1);
 			if (WIFSIGNALED(status))
 				shell->exit_status = EXIT_SIGNAL_BASE + WTERMSIG(status);
 			else
