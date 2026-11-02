@@ -1,4 +1,4 @@
-NAME = minishell
+NAME = chrishell
 
 SRCDIR = src
 OBJDIR = .obj
