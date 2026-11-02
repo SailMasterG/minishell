@@ -42,7 +42,6 @@ int	set_env(char **envp, char *cwd, char *key)
 	tmp = envp[pos];
 	envp[pos] = ft_strjoin(tmp, cwd);
 	free(tmp);
-	ft_putendl_fd(envp[pos], 2);
 	return (0);
 }
 
@@ -64,6 +63,7 @@ static int	change_dir(t_shell *shell, char *path)
 		perror(shell->cmds->cmd_args[1]);
 		return (free(cwd), 1);
 	}
+	free(cwd);
 	cwd = getcwd(NULL, 0);
 	if (set_env(shell->env, cwd, "PWD"))
 		return (1);
