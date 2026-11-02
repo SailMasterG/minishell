@@ -30,30 +30,33 @@ char	*search_paths(char **envp, char *key)
 
 int	set_env(char **envp, char *cwd, char *key)
 {
-	int	pos;
+	int		pos;
+	char	*tmp;
 
 	pos = 0;
 	pos = env_pos(envp, key);
 	if (pos == -1)
-		return (0);
+		return (1);
 	free(envp[pos]);
-	envp[pos] = ft_strjoin(key, cwd);
-	return (1);
+	envp[pos] = ft_strjoin(key, "=");
+	tmp = envp[pos];
+	envp[pos] = ft_strjoin(tmp, cwd);
+	free(tmp);
+	ft_putendl_fd(envp[pos], 2);
+	return (0);
 }
 
 static int	change_dir(t_shell *shell, char *path)
 {
 	char	*cwd;
-	char	**envp;
 
-	envp = shell->env;
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
 		perror("getcwd");
 		return (1);
 	}
-	if (set_env(envp, cwd, "PWD="))
+	if (set_env(shell->env, cwd, "OLDPWD") == 1)
 		return (1);
 	if (chdir(path) == -1)
 	{
@@ -61,7 +64,8 @@ static int	change_dir(t_shell *shell, char *path)
 		perror(shell->cmds->cmd_args[1]);
 		return (free(cwd), 1);
 	}
-	if (set_env(envp, cwd, "OLDPWD="))
+	cwd = getcwd(NULL, 0);
+	if (set_env(shell->env, cwd, "PWD"))
 		return (1);
 	free(cwd);
 	return (0);
